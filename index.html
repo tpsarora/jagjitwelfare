@@ -1,43 +1,205 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jagjit Welfare - Medical Aids on Rent</title>
+    <title>Jagjit Welfare - Medical Aids</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        header p {
+            margin: 5px 0 0;
+            font-size: 16px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .gallery-item {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .gallery-item img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+        .gallery-item h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .gallery-item p.description {
+            margin: 10px 0 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .gallery-item p.quantity {
+            margin: 0;
+            font-size: 16px;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>Jagjit Welfare</h1>
         <p>Providing Medical Aids for Patients on Rent Basis Free of Cost</p>
     </header>
-    
+
     <main>
         <section class="gallery">
-            <h2>Our Medical Aids</h2>
-            <div class="grid-container">
-                <!-- Replace 'imageX.jpg' with your actual image file names -->
-                <div class="container">
+            <!-- Picture 1 -->
+            <div class="gallery-item">
+                <img src="01 Wheel_Chair.png" alt="Wheel Chair">
+                <div>
                     <h2>Wheel Chair</h2>
-                    <img src="01 Wheel_Chair.png" alt="Wheel Chair">
+                    <p class="quantity">Quantity: 10</p>
                     <p class="description">This is a wheel chair available for rent. It is designed for comfort and ease of use for patients.</p>
-                    
-                    <div class="navigation">
-                        <!-- Update these links accordingly -->
-                        <a href="picture12.html">Previous</a> | <a href="picture2.html">Next</a>
-                    </div>
                 </div>
-                <div class="grid-item"><img src="02 Oxygen_Concentrator.png" alt="Medical Aid 2"></div>
-                <div class="grid-item"><img src="03 Air_Bed.png" alt="Medical Aid 3"></div>
-                <div class="grid-item"><img src="04 Walker.png" alt="Medical Aid 4"></div>
-                <div class="grid-item"><img src="05 Back_Rest.png" alt="Medical Aid 5"></div>
-                <div class="grid-item"><img src="06 Commode_Chair.png" alt="Medical Aid 6"></div>
-                <div class="grid-item"><img src="07 Massager.png" alt="Medical Aid 7"></div>
-                <div class="grid-item"><img src="08 Nebulizer.png" alt="Medical Aid 8"></div>
-                <div class="grid-item"><img src="09 Steamer.png" alt="Medical Aid 9"></div>
-                <div class="grid-item"><img src="10 Patient_Bed.png" alt="Medical Aid 10"></div>
-                <div class="grid-item"><img src="11 Patient_Monitor.png" alt="Medical Aid 11"></div>
-                <div class="grid-item"><img src="12 Suction_Machine.png" alt="Medical Aid 12"></div>
+            </div>
+            
+            <!-- Picture 2 -->
+            <div class="gallery-item">
+                <img src="02 Oxygen_Concentrator.png" alt="Oxygen Concentrator">
+                <div>
+                    <h2>Oxygen Concentrator</h2>
+                    <p class="quantity">Quantity: 5</p>
+                    <p class="description">This oxygen concentrator provides a steady flow of oxygen for respiratory support.</p>
+                </div>
+            </div>
+
+            <!-- Picture 3 -->
+            <div class="gallery-item">
+                <img src="03 Air_Bed.png" alt="Air Bed">
+                <div>
+                    <h2>Air Bed</h2>
+                    <p class="quantity">Quantity: 7</p>
+                    <p class="description">This air bed helps in patient comfort and support during prolonged bed rest.</p>
+                </div>
+            </div>
+
+            <!-- Picture 4 -->
+            <div class="gallery-item">
+                <img src="04 Walker.png" alt="Walker">
+                <div>
+                    <h2>Walker</h2>
+                    <p class="quantity">Quantity: 12</p>
+                    <p class="description">A walker designed to assist patients with mobility challenges.</p>
+                </div>
+            </div>
+
+            <!-- Picture 5 -->
+            <div class="gallery-item">
+                <img src="05 Back_Rest.png" alt="Back Rest">
+                <div>
+                    <h2>Back Rest</h2>
+                    <p class="quantity">Quantity: 8</p>
+                    <p class="description">A back rest to provide support and comfort while sitting or reclining.</p>
+                </div>
+            </div>
+
+            <!-- Picture 6 -->
+            <div class="gallery-item">
+                <img src="06 Commode_Chair.png" alt="Commode Chair">
+                <div>
+                    <h2>Commode Chair</h2>
+                    <p class="quantity">Quantity: 6</p>
+                    <p class="description">A commode chair for convenient and comfortable toileting needs.</p>
+                </div>
+            </div>
+
+            <!-- Picture 7 -->
+            <div class="gallery-item">
+                <img src="07 Massager.png" alt="Massager">
+                <div>
+                    <h2>Massager</h2>
+                    <p class="quantity">Quantity: 4</p>
+                    <p class="description">A massager to help alleviate muscle tension and provide relaxation.</p>
+                </div>
+            </div>
+
+            <!-- Picture 8 -->
+            <div class="gallery-item">
+                <img src="08 Nebulizer.png" alt="Nebulizer">
+                <div>
+                    <h2>Nebulizer</h2>
+                    <p class="quantity">Quantity: 9</p>
+                    <p class="description">A nebulizer for delivering medication directly to the lungs.</p>
+                </div>
+            </div>
+
+            <!-- Picture 9 -->
+            <div class="gallery-item">
+                <img src="09 Steamer.png" alt="Steamer">
+                <div>
+                    <h2>Steamer</h2>
+                    <p class="quantity">Quantity: 5</p>
+                    <p class="description">A steamer used for respiratory therapy and health care.</p>
+                </div>
+            </div>
+
+            <!-- Picture 10 -->
+            <div class="gallery-item">
+                <img src="10 Patient_Bed.png" alt="Patient Bed">
+                <div>
+                    <h2>Patient Bed</h2>
+                    <p class="quantity">Quantity: 3</p>
+                    <p class="description">A patient bed designed for comfort and ease of patient care.</p>
+                </div>
+            </div>
+
+            <!-- Picture 11 -->
+            <div class="gallery-item">
+                <img src="11 Patient_Monitor.png" alt="Patient Monitor">
+                <div>
+                    <h2>Patient Monitor</h2>
+                    <p class="quantity">Quantity: 2</p>
+                    <p class="description">A patient monitor for tracking vital signs and health metrics.</p>
+                </div>
+            </div>
+
+            <!-- Picture 12 -->
+            <div class="gallery-item">
+                <img src="12 Suction_Machine.png" alt="Suction Machine">
+                <div>
+                    <h2>Suction Machine</h2>
+                    <p class="quantity">Quantity: 4</p>
+                    <p class="description">A suction machine used for clearing airways and respiratory support.</p>
+                </div>
             </div>
         </section>
     </main>

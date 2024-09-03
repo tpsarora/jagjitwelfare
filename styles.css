@@ -25,7 +25,15 @@ header h1 {
 header p {
     font-size: 1.2em;
 }
-
+table {
+    width: 100%; /* Set table width to 100% of the container */
+    border-collapse: collapse; /* Optional: for better border handling */
+}
+td {
+    padding: 10px; /* Add some padding to cells */
+    background-color: #fff; /* Set background color for cells */
+    vertical-align: top; /* Align contents to the top */
+}
 main {
     padding: 20px;
 }

@@ -40,7 +40,6 @@ main {
 .gallery-image {
     width: 100%;
     height: auto; /* Maintain aspect ratio */
-    display: block; /* Ensure the image takes up the container width */
 }
 
 .overlay {
@@ -49,7 +48,7 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    color: white; /* Contrast color for text */
+    color: white; /* Or any color that contrasts with your image */
     background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
     display: flex;
     flex-direction: column;
@@ -85,7 +84,6 @@ main {
     overflow: hidden;
     border: 1px solid #ddd;
     border-radius: 8px;
-    position: relative; /* Ensure that child elements are positioned relative to this container */
 }
 
 .grid-item img {
@@ -103,6 +101,3 @@ footer {
     width: 100%;
     bottom: 0;
 }
-Key Adjustments:
-* { box-sizing: border-box; }: Ensures that padding and borders are included in the total width and height of elements, making layout calculations more predictable.
-

@@ -9,51 +9,55 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-around;
-            background-color: #800000; /* Maroon color */
-            padding: 15px;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            padding: 14px 20px;
-            display: block;
-        }
-        .navbar a:hover {
-            background-color: #b30000; /* Darker maroon for hover effect */
-            border-radius: 4px;
-        }
-        .container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            color: #333;
+            background-color: #fff;
         }
         .header {
+            background-color: #800000; /* Maroon */
+            color: #fff;
             text-align: center;
-            padding: 50px 0;
-            background-color: #800000; /* Maroon color */
-            color: white;
+            padding: 20px 0;
         }
         .header h1 {
             margin: 0;
-            font-size: 3em;
+            font-size: 2.5em;
         }
-        .content {
-            background-color: white;
+        .nav {
+            background-color: #600000; /* Darker Maroon */
+            padding: 10px;
+            text-align: center;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 1.2em;
+        }
+        .main {
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .main img {
+            max-width: 100%;
+            height: auto;
+            border: 5px solid #800000; /* Maroon border */
+            border-radius: 10px;
+            margin: 10px;
+        }
+        .quotes {
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #800000; /* Maroon */
+        }
+        .quotes h2 {
+            color: #800000; /* Maroon */
         }
         .footer {
+            background-color: #800000; /* Maroon */
+            color: #fff;
             text-align: center;
-            padding: 10px;
-            background-color: #800000; /* Maroon color */
-            color: white;
+            padding: 10px 0;
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -61,28 +65,41 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <a href="#home">Home</a>
-        <a href="Aboutus.html">About Us</a>
-        <a href="Offerings.html">Offerings</a>
-        <a href="Contactus.html">Contact Us</a>
-    </div>
-
-    <div class="header">
+    <header class="header">
         <h1>Jagjit Welfare Trust</h1>
-    </div>
-
-    <div class="container">
-        <div class="content" id="home">
-            <h2>Welcome to Jagjit Welfare Trust</h2>
-            <p>Welcome to our website. Here at Jagjit Welfare Trust, we are dedicated to making a difference in our community through various initiatives and support programs. Explore our site to learn more about what we do and how you can get involved.</p>
-        </div>
-
+    </header>
+    
+    <nav class="nav">
+        <a href="#">Home</a>
+        <a href="#">About Us</a>
+        <a href="#">Projects</a>
+        <a href="#">Get Involved</a>
+        <a href="#">Contact</a>
+    </nav>
+    
+    <main class="main">
+        <h2>Welcome to Jagjit Welfare Trust</h2>
+        <p>Dedicated to serving the community and making a positive impact.</p>
         
-    </div>
-
-    <div class="footer">
-        <p>&copy; 2024 Jagjit Welfare Trust. All rights reserved.</p>
-    </div>
+        <div class="photo-gallery">
+            <img src="path-to-your-image1.jpg" alt="Community Event">
+            <img src="path-to-your-image2.jpg" alt="Volunteers in Action">
+            <img src="path-to-your-image3.jpg" alt="Helping Hands">
+        </div>
+        
+        <div class="quotes">
+            <h2>Quotes</h2>
+            <blockquote>
+                "The best way to find yourself is to lose yourself in the service of others." – Mahatma Gandhi
+            </blockquote>
+            <blockquote>
+                "Service to others is the rent you pay for your room here on earth." – Muhammad Ali
+            </blockquote>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>&copy; 2024 Jagjit Welfare Trust | All Rights Reserved</p>
+    </footer>
 </body>
 </html>

@@ -24,11 +24,21 @@
             position: relative; /* Allows positioning of children */
             height: 100px; /* Set a height for the header */
         }
-              .header a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
+              .header-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header a {
+        display: inline-block;
+        margin-right: 10px; /* Space between image and text */
+    }
+    
+    h1 {
+        margin: 0; /* Remove default margin for heading */
+    }
         ..home-button 
         {
             position: absolute; /* Positions the button */
@@ -106,10 +116,10 @@
 
 <body>
     <div class="header">
-
-        <a href="index.html" ><img src="Home_Button.png" width="60" height="60" alt="Home Button" class="home-button"> </a>
-                <h1>Contact Us</h1>
-
+        <div class="header-container">
+            <a href="index.html"><img src="Home_Button.png" width="60" height="60" alt="Home Button" class="home-button"></a>
+            <h1>Contact Us</h1>
+        </div>
     </div>
 
     <div class="container">

@@ -13,16 +13,29 @@
             color: #333;
         }
         header {
-            background-color: #800000; /* Maroon */
-            color: #fff;
+            background-color: #800000;
+            /* Maroon color */
+            color: #ffffff;
             text-align: center;
             padding: 20px 0;
+            display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content */
+    position: relative; /* Allows positioning */
         }
+        .home-button {
+            position: absolute; /* Positions the button */
+    left: 20px; /* Distance from the left */
+
         .container {
             width: 80%;
             margin: 0 auto;
             padding: 20px;
         }
+
+        h1 {
+    margin-left: 120px; /* Space to the left to avoid overlap with the button */
+}
         h1, h2 {
             margin: 0;
         }
@@ -63,6 +76,7 @@
 </head>
 <body>
     <header>
+        <a href="index.html" ><img src="Home_Button.png" width="60" height="60" alt="Home Button" class="home-button"> </a>
         <h1>Jagjit Welfare Trust</h1>
     </header>
 

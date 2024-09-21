@@ -21,9 +21,12 @@
             display: flex;
     align-items: center;
     justify-content: center; /* Center the content */
+    position: relative; /* Allows positioning */
         }
         .home-button {
-    margin-right: 20px; /* Space between the button and text */
+            position: absolute; /* Positions the button */
+    left: 20px; /* Distance from the left */
+    
 }
         .container {
             width: 90%;
@@ -38,7 +41,9 @@
         .contact-info {
             margin-bottom: 20px;
         }
-
+        h1 {
+    margin-left: 120px; /* Space to the left to avoid overlap with the button */
+}
         .contact-info h2 {
             color: #800000;
             /* Maroon color */
@@ -93,8 +98,8 @@
 <body>
     <div class="header">
 
-            <img src="Home_Button.png" width="100" height="100" alt="Home Button" class="home-button" align="left"> 
-            <h1>Contact Us</h1>
+                <img src="Home_Button.png" width="100" height="100" alt="Home Button" class="home-button"> 
+                <h1>Contact Us</h1>
 
     </div>
 

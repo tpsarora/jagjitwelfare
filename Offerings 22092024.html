@@ -1,10 +1,9 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jagjit Welfare Trust</title>
-    <link rel="stylesheet" href="styles.css">
+        <title>Jagjit Welfare Trust</title>
+     <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,28 +11,43 @@
             margin: 0;
             padding: 20px;
         }
-        .header {
+        .header 
+            {
             background-color: #800000; /* Maroon */
             color: #fff;
             text-align: center;
-            padding: 20px 10px; /* Added padding for mobile */
-        }
-        .header h1 { 
-            margin: 10px 0; 
-            font-size: 2.5em; 
-        }
-        .header h2 { 
-            margin: 10px 0; 
-            font-size: 1.5em; 
-        }
-        .header h3 { 
-            margin: 10px 0; 
-            font-size: 1em; 
-        }
-        .home-button {
+            padding: 20px 0;
+            }
+            .header h1 { margin: 0; font-size: 2.5em; }
+            .header h2 { margin: 0; font-size: 1.5em; }
+            .header h3 { margin: 0; font-size: 1.0em; }
+
+            .gallery-item h5 { margin: 0; color:#800000; font-size: 2em;  }
+            .gallery-item h6 { margin: 0; color:#0d65d8; font-size: 1em;  }
+
+        .home-button 
+            {
             position: absolute; /* Positions the button */
-            left: 20px; /* Distance from the left */
-            top: 20px; /* Distance from the top */
+            left: 50px; /* Distance from the left */
+            }
+
+        header {
+            background-color: #800000;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            color: #fff;
+            font-size: 24px;
+            text-align: center;
+        }
+        header p {
+            margin: 5px 0 0;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
         }
         .gallery {
             display: flex;
@@ -51,7 +65,6 @@
             padding: 20px;
             width: 100%;
             box-sizing: border-box;
-            margin-bottom: 20px; /* Added margin for spacing */
         }
         .gallery-item img {
             max-width: 150px;
@@ -59,48 +72,36 @@
             border-radius: 8px;
             margin-right: 20px;
         }
-        .gallery-item h5 { 
-            margin: 0; 
-            color: #800000; 
-            font-size: 1.5em; /* Adjusted font size */
+        .gallery-item h2 {
+            margin: 0;
+            font-size: 22px;
         }
-        .gallery-item h6 { 
-            margin: 0; 
-            color: #0d65d8; 
-            font-size: 1em; 
-        }
-        .gallery-item p {
+        .gallery-item p.description {
             margin: 10px 0 0;
-            font-size: 0.9em; /* Adjusted font size */
+            font-size: 16px;
             color: #555;
         }
+        .gallery-item p.quantity {
+            margin: 0;
+            font-size: 16px;
+            color: #007BFF;
+            font-weight: bold;
+        }
         .footer {
-            background-color: #800000; /* Maroon */
-            color: #fff;
-            text-align: center;
-            padding: 10px 0; /* Adjusted padding */
-            position: relative; /* Adjusted position */
-            bottom: 0;
-            width: 100%;
-        }
-        
-        /* Media Queries for responsiveness */
-        @media (max-width: 600px) {
-            .header h1 { font-size: 2em; }
-            .header h2 { font-size: 1.2em; }
-            .header h3 { font-size: 0.9em; }
-            .gallery-item h5 { font-size: 1.2em; }
-            .gallery-item p { font-size: 0.8em; }
-        }
+        background-color: #800000; /* Maroon */
+        color: #fff;
+        text-align: center;
+        padding: 1px 0;
+    }
     </style>
 </head>
 <body>
     <div class="header">
         <a href="index.html"><img src="Home_Button.png" width="60" height="60" alt="Home Button" class="home-button"></a>
-        <h1>Jagjit Welfare Trust</h1>
-        <h2>FOSTERING LOVE, TRANSFORMING LIVES...</h2>
-        <h3>We provide medical aids to patients on rent (Zero Rent - Free of Charge). You can use till you need and then return after proper sanitization.</h3> 
-    </div>
+        <h1> Jagjit Welfare Trust</h1> <br>
+        <h2> FOSTERING LOVE, TRANSFORMING LIVES... </h2><br>
+        <h3> We provide medical aids to patients on rent (Zero Rent - Free of Charge). You can use till you need and then return after proper sanitization. </h3> 
+</div>
 
     <main>
         <section class="gallery">

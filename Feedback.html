@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"> <link rel="stylesheet" href="commonstyles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <style>
+    @font-face {
+      font-family: 'Century Gothic';
+      src: url('../../../assets/fonts/Century Gothic/century-gothic/CenturyGothic.ttf');
+    }
+
+    @font-face {
+      font-family: 'Century Gothic';
+      src: url('../../../assets/fonts/Century Gothic/century-gothic/GOTHICB.TTF');
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+
+    .center-text {
+      text-align: center;
+    }
+
+    form.name {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      width: 400px;
+      margin-top: 30px;
+      padding-bottom: 50px;
+    }
+
+    form.email {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      width: 400px;
+      margin-top: 30px;
+      padding-bottom: 50px;
+    }
+
+    form.mobile {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      width: 400px;
+      margin-top: 30px;
+      padding-bottom: 50px;
+    }
+.contact_container
+{
+  display: flex;
+  flex-direction: row;
+  gap:50px;
+}
+    .quotes {
+      font-family: 'Century Gothic';
+      font-weight: bold;
+      font-size: larger;
+      padding: 1px;
+      margin: 5px;
+      margin-left: 30px;
+      
+      /* Maroon */
+    }
+
+    input,
+    button,
+    textarea {
+      margin-top: 5px;
+      margin-bottom: 35px;
+      padding: 8px;
+      font-family: 'Century Gothic';
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      cursor: pointer;
+      margin-top: 10px;
+      font-family: 'Century Gothic';
+      font-weight: bold;
+      font-size: larger;
+      background-color: transparent;
+      color: black;
+      border: 1px solid black;
+      padding: 4px 16px;
+      transition: 0.4s;
+      width: 100%;
+    }
+
+    button:hover:enabled {
+      color: white;
+      background-color: black;
+    }
+
+    .contact-image {
+      display: flex;
+      margin-top: 20px;
+      flex-direction: column;
+      gap: 50x;
+    }
+
+    .contact-form {
+      width: 500px;
+    }
+  </style>
+</head>
+
+
+<body>
+<nav class="nav">
+  <a href="index.html">Home</a>
+  <a href="Aboutus.html">About Us</a>
+  <a href="Offerings.html">Offerings</a>
+  <a href="Purposeoflife.html">Purpose of Life</a>
+  <a href="Contactus.html">Contact Us</a>
+  <a href="Feedback.html">Feedback</a>
+</nav>
+
+<div Class="contact_container">
+  <div class="contact-image">
+    <img src="Your-Feedback-Matters.png" style="height: 400px;">
+
+    <div class="quotes">
+      "Strive for continuous improvement, instead of perfection."
+    </div>
+  </div>
+
+  <div class="contact-form">
+    <h2 style="color : #c3231e">Please share your Feedback</h2>
+    <form class="contact" id="feedbackForm">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div>
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="contact@example.com">
+      </div>
+
+      <div>
+        <label for="mobile">Mobile Number</label>
+        <input type="text" id="mobile" name="mobile" placeholder="mobile" required>
+      </div>
+
+      <div>
+        <label for="feedback">Your Feedback</label>
+        <textarea id="feedback" name="feedback" maxlength="256" required></textarea>
+     
+      </div>
+
+      <button type="button" onclick="submitForm()">Submit</button>
+
+      <input id="honeypot" class="hidden" type="text" />
+
+      <div id="status" class="center-text"></div>
+    </form>
+  </div>
+</div>
+
+  <script>
+    function submitForm() {
+      var name = document.getElementById("name").value;
+      var email = document.getElementById("email").value;
+      var mobile = document.getElementById("mobile").value;
+      var feedback = document.getElementById("feedback").value;
+
+      var url = "https://script.google.com/macros/s/AKfycbxLQd4XpMkW9-hnLuUA3FhizXKG2bBrAs_Mboggpxaflz_AJ_MmLgzG-CFqEUq8lp2CNg/exec";  // Replace with your Web App URL
+
+      var formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('mobile', mobile);
+      formData.append('feedback', feedback);
+
+      fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      }).then(response => {
+        document.getElementById("status").innerHTML = "Feedback submitted!";
+        document.getElementById("feedbackForm").reset();
+      }).catch(error => {
+        document.getElementById("status").innerHTML = "Error submitting feedback!";
+      });
+    }
+  </script>
+</div>
+</body>
+</html>

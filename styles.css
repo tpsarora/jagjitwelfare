@@ -22,19 +22,6 @@ body {
     font-size: 2.5em;
 }
 
-.nav {
-    background-color: #600000; /* Darker Maroon */
-    padding: 10px;
-    text-align: center;
-}
-
-.nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 15px;
-    font-size: 1.2em;
-}
-
 .main {
     padding: 20px;
     text-align: center;

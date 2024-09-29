@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="commonstyles.css">
     <title>Jagjit Welfare Trust</title>
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -10,27 +11,30 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 20px;
         }
         .header {
-            background-color: #800000; /* Maroon */
+            background-color: #800000;
+            /* Maroon */
             color: #fff;
             text-align: center;
-            padding: 20px 10px; /* Added padding for mobile */
-            position: relative; /* Allow for positioning of button */
+            padding: 20px 0;
         }
-        .header h1 { 
-            margin: 10px 0; 
-            font-size: 2.5em; 
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
         }
-        .header h2 { 
-            margin: 10px 0; 
-            font-size: 1.5em; 
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.5em;
         }
-        .header h3 { 
-            margin: 10px 0; 
-            font-size: 1em; 
+
+        .header h3 {
+            margin: 0;
+            font-size: 1.0em;
         }
+
         .home-button {
             position: absolute; /* Positions the button */
             left: 20px; /* Distance from the left */
@@ -41,6 +45,7 @@
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
+            padding: 20px;
         }
         .gallery-item {
             display: flex;
@@ -60,15 +65,15 @@
             border-radius: 8px;
             margin-right: 20px;
         }
-        .gallery-item h5 { 
-            margin: 0; 
-            color: #800000; 
+        .gallery-item h5 {
+            margin: 0;
+            color: #800000;
             font-size: 1.5em; /* Adjusted font size */
         }
-        .gallery-item h6 { 
-            margin: 0; 
-            color: #0d65d8; 
-            font-size: 1em; 
+        .gallery-item h6 {
+            margin: 0;
+            color: #0d65d8;
+            font-size: 1em;
         }
         .gallery-item p {
             margin: 10px 0 0;
@@ -84,7 +89,7 @@
             bottom: 0;
             width: 100%;
         }
-        
+
         /* Media Queries for responsiveness */
         @media (max-width: 600px) {
             .header h1 { font-size: 2em; }
@@ -96,11 +101,18 @@
     </style>
 </head>
 <body>
+    <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="Aboutus.html">About Us</a>
+        <a href="Offerings.html">Offerings</a>
+        <a href="Purposeoflife.html">Purpose of Life</a>
+        <a href="Contactus.html">Contact Us</a>
+    </nav>
+
     <div class="header">
-        <a href="index.html"><img src="Home_Button.png" width="60" height="60" alt="Home Button" class="home-button"></a>
-        <h1>Jagjit Welfare Trust</h1>
-        <h2>FOSTERING LOVE, TRANSFORMING LIVES...</h2>
-        <h3>We provide medical aids to patients on rent (Zero Rent - Free of Charge). You can use till you need and then return after proper sanitization.</h3> 
+        <h1> Jagjit Welfare Trust</h1> <br>
+        <h2> FOSTERING LOVE, TRANSFORMING LIVES... </h2><br>
+        <h3> We provide medical aids to patients on rent (Zero Rent - Free of Charge). You can use till you need and then return after proper sanitization. </h3>
     </div>
 
     <main>
@@ -114,7 +126,7 @@
                     <p class="description">A wheelchair is a mobilized form of chair using 2 or more wheels, a footrest, and an armrest usually cushioned. It is used when walking is difficult or impossible to do due to illnesses, injury, disabilities, or age-related health conditions.</p>
                 </div>
             </div>
-            
+
             <!-- Picture 2 -->
             <div class="gallery-item">
                 <img src="02 Oxygen_Concentrator.png" alt="Oxygen Concentrator">

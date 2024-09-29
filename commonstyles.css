@@ -1,0 +1,38 @@
+﻿.nav {
+    background-color: #600000; /* Darker Maroon */
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
+}
+
+.nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px; /* Adjusted for better spacing */
+    font-size: 1.5em; /* Slightly reduced for better readability */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+}
+
+.nav a:hover {
+    background-color: #8B0000; /* Lighter Maroon on hover */
+    color: #fff; /* Ensures text remains visible */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .nav a {
+        font-size: 1.2em; /* Adjust font size for smaller screens */
+        padding: 10px 15px; /* Adjust padding for better touch targets */
+    }
+}
+
+@media (max-width: 480px) {
+    .nav {
+        padding: 5px; /* Reduced padding for very small screens */
+    }
+
+    .nav a {
+        font-size: 1em; /* Further reduce font size for mobile */
+        padding: 8px 10px; /* Smaller padding */
+    }
+}

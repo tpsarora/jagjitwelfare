@@ -53,21 +53,45 @@
             margin-bottom: 5px;
             font-size: 2em;
             font-weight: bold;
+            /* Responsive adjustments */
+            max-width: 90%;
+            /* Limit width to avoid overflowing on small screens */
+            margin: 0 auto;
+            /* Centering the hero section */
         }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .hero {
+                font-size: 1.5em;
+                /* Adjust font size for tablets */
+                padding: 8px;
+                /* Slightly reduce padding */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                font-size: 1.2em;
+                /* Adjust font size for mobile */
+                padding: 5px;
+                /* Further reduce padding */
+            }
+        }
+
 
         .section {
             background-color: #fff;
             color: #333;
             padding: 10px;
             border-radius: 5px;
-            margin-bottom: 50px;
+            margin-top: 10px;
         }
 
         .section h2 {
             color: #800000;
             /* Maroon */
         }
-
     </style>
 </head>
 

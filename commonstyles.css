@@ -6,7 +6,6 @@
     align-items: center; /* Vertically center the items */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
     white-space: nowrap; /* Prevent wrapping of navigation items */
-    overflow: hidden; /* Hide overflow */
     max-width: 100%; /* Ensure nav doesn't exceed container */
 }
 
@@ -41,7 +40,7 @@
 
     .nav a {
         font-size: 0.9em; /* Further reduce font size for mobile */
-        padding: 7px 9px; /* Smaller padding */
+        padding: 7px 5px; /* Smaller padding */
     }
 }
 

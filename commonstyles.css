@@ -7,6 +7,7 @@
     flex-wrap: wrap; /* Allows items to wrap into new rows */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
     max-width: 100%; /* Ensure nav doesn't exceed container */
+    gap: 5px;
 }
 
 .nav a {

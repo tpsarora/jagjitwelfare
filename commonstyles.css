@@ -13,12 +13,14 @@
     text-decoration: none;
     padding: 10px 20px; /* Adjusted for better spacing */
     font-size: 1.5em; /* Slightly reduced for better readability */
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+    transition: background-color 0.3s, color 0.3s, border-radius 0.3s; /* Smooth transition for hover effects */
+    border-radius: 5px; /* Adds rounded edges by default */
 }
 
 .nav a:hover {
     background-color: #8B0000; /* Lighter Maroon on hover */
     color: #fff; /* Ensures text remains visible */
+    border-radius: 15px; /* Increases rounded edges on hover */
 }
 
 /* Responsive styles */
@@ -37,5 +39,67 @@
     .nav a {
         font-size: 1em; /* Further reduce font size for mobile */
         padding: 8px 10px; /* Smaller padding */
+    }
+}
+
+
+
+.header {
+    background-color: #800000;
+    /* Maroon */
+    color: #fff;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem; /* Relative unit for scaling */
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header {
+        padding: 1.5rem 0;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .header h2 {
+        font-size: 1.5rem;
+    }
+
+    .header h3 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 1rem 0;
+    }
+
+    .header h1 {
+        font-size: 1.75rem;
+    }
+
+    .header h2 {
+        font-size: 1.25rem;
+    }
+
+    .header h3 {
+        font-size: 0.9rem;
     }
 }

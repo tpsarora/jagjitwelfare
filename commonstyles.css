@@ -4,8 +4,8 @@
     display: flex; /* Use flexbox for layout */
     justify-content: center; /* Space items evenly */
     align-items: center; /* Vertically center the items */
+    flex-wrap: wrap; /* Allows items to wrap into new rows */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
-    white-space: nowrap; /* Prevent wrapping of navigation items */
     max-width: 100%; /* Ensure nav doesn't exceed container */
 }
 
@@ -27,20 +27,36 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
+    .nav {
+        display: flex;
+        flex-wrap: wrap; /* Ensure items wrap if there's no space */
+        justify-content: space-between; /* Distribute evenly */
+    }
+
     .nav a {
-        font-size: 1.2em; /* Adjust font size for smaller screens */
-        padding: 10px 15px; /* Adjust padding for better touch targets */
+        font-size: 1.2em; /* Keep the font size the same */
+        padding: 10px 15px; /* Maintain padding for touch targets */
+        background-color: #8B0000; /* Maintain background color for tabs */
+        flex: 1 1 auto; /* Allows flexible growth but maintains proportions */
+        white-space: nowrap; /* Prevents text from wrapping within the tabs */
     }
 }
 
 @media (max-width: 480px) {
     .nav {
-        padding: 4px; /* Reduced padding for very small screens */
+        display: flex;
+        flex-wrap: wrap; /* Ensure items wrap if there's no space */
+        justify-content: space-between; /* Distribute evenly */
     }
 
     .nav a {
-        font-size: 0.9em; /* Further reduce font size for mobile */
-        padding: 7px 5px; /* Smaller padding */
+        font-size: 0.9em; /* Keep font size consistent */
+        padding: 7px 15px; /* Adjust padding for small screens */
+        margin: 5px 0; /* Stack items vertically with minimal margin */
+        background-color: #8B0000; /* Maintain tab background color */
+        border-radius: 5px; /* Rounded edges for tab look */
+        white-space: nowrap; /* Prevents text from wrapping within the tabs */
+        flex: 1 1 auto; /* Allows flexible growth but maintains proportions */
     }
 }
 

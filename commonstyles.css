@@ -105,3 +105,13 @@
         font-size: 0.9rem;
     }
 }
+
+footer {
+    background-color: #800000;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

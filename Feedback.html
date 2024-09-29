@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en"> <link rel="stylesheet" href="commonstyles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<link rel="stylesheet" href="commonstyles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <head>
   <style>
-
     .hidden {
       display: none;
     }
@@ -42,21 +43,27 @@
       margin-top: 30px;
       padding-bottom: 50px;
     }
-.contact_container
-{
-  display: flex;
-  flex-direction: row;
-  gap:50px;
-}
+
+    .contact_container {
+      display: flex;
+      flex-direction: row;
+      margin: 50px;
+    }
+
+    .contact_container>* {
+      flex-grow: 1;
+      /* Ensure items grow equally */
+      flex-basis: 0;
+      /* Start from equal base width */
+      min-width: 0;
+      /* Prevent overflowing content from breaking layout */
+    }
+
     .quotes {
-      font-family: 'Century Gothic';
       font-weight: bold;
       font-size: larger;
       padding: 1px;
       margin: 5px;
-      margin-left: 30px;
-      
-      /* Maroon */
     }
 
     input,
@@ -65,7 +72,6 @@
       margin-top: 5px;
       margin-bottom: 35px;
       padding: 8px;
-      font-family: 'Century Gothic';
       width: 100%;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -75,7 +81,6 @@
     button {
       cursor: pointer;
       margin-top: 10px;
-      font-family: 'Century Gothic';
       font-weight: bold;
       font-size: larger;
       background-color: transparent;
@@ -95,7 +100,21 @@
       display: flex;
       margin-top: 20px;
       flex-direction: column;
-      gap: 50x;
+      gap: 50px;
+      /* Keep this in pixels */
+      align-items: center;
+      /* Center the content */
+    }
+
+    .responsive-image {
+      width: 100%;
+      /* Take full width of the container */
+      height: auto;
+      /* Maintain aspect ratio */
+      max-width: 600px;
+      /* Set a maximum width as needed */
+      object-fit: contain;
+      /* Scale the image to maintain aspect ratio */
     }
 
     .contact-form {
@@ -106,56 +125,56 @@
 
 
 <body>
-<nav class="nav">
-  <a href="index.html">Home</a>
-  <a href="Aboutus.html">About Us</a>
-  <a href="Offerings.html">Offerings</a>
-  <a href="Purposeoflife.html">Purpose of Life</a>
-  <a href="Contactus.html">Contact Us</a>
-  <a href="Feedback.html">Feedback</a>
-</nav>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="Aboutus.html">About Us</a>
+    <a href="Offerings.html">Offerings</a>
+    <a href="Purposeoflife.html">Purpose of Life</a>
+    <a href="Contactus.html">Contact Us</a>
+    <a href="Feedback.html">Feedback</a>
+  </nav>
 
-<div Class="contact_container">
-  <div class="contact-image">
-    <img src="Your-Feedback-Matters.png" style="height: 400px;">
+  <div Class="contact_container">
+    <div class="contact-image">
+      <img src="Your-Feedback-Matters.png" class="responsive-image">
 
-    <div class="quotes">
-      "Strive for continuous improvement, instead of perfection."
+      <div class="quotes">
+        "Strive for continuous improvement, instead of perfection."
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h2>Please share your Feedback</h2>
+      <form class="contact" id="feedbackForm">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <div>
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="contact@example.com">
+        </div>
+
+        <div>
+          <label for="mobile">Mobile Number</label>
+          <input type="text" id="mobile" name="mobile" placeholder="mobile" required>
+        </div>
+
+        <div>
+          <label for="feedback">Your Feedback</label>
+          <textarea id="feedback" name="feedback" maxlength="256" required></textarea>
+
+        </div>
+
+        <button type="button" onclick="submitForm()">Submit</button>
+
+        <input id="honeypot" class="hidden" type="text" />
+
+        <div id="status" class="center-text"></div>
+      </form>
     </div>
   </div>
-
-  <div class="contact-form">
-    <h2 style="color : #c3231e">Please share your Feedback</h2>
-    <form class="contact" id="feedbackForm">
-      <div>
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required>
-      </div>
-
-      <div>
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="contact@example.com">
-      </div>
-
-      <div>
-        <label for="mobile">Mobile Number</label>
-        <input type="text" id="mobile" name="mobile" placeholder="mobile" required>
-      </div>
-
-      <div>
-        <label for="feedback">Your Feedback</label>
-        <textarea id="feedback" name="feedback" maxlength="256" required></textarea>
-     
-      </div>
-
-      <button type="button" onclick="submitForm()">Submit</button>
-
-      <input id="honeypot" class="hidden" type="text" />
-
-      <div id="status" class="center-text"></div>
-    </form>
-  </div>
-</div>
 
   <script>
     function submitForm() {
@@ -184,6 +203,7 @@
       });
     }
   </script>
-</div>
+  </div>
 </body>
+
 </html>

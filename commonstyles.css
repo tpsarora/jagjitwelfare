@@ -1,4 +1,9 @@
-﻿.nav {
+﻿body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.nav {
     background-color: #600000; /* Darker Maroon */
     padding: 10px;
     display: flex; /* Use flexbox for layout */

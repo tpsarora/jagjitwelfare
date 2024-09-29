@@ -2,10 +2,12 @@
     background-color: #600000; /* Darker Maroon */
     padding: 10px;
     display: flex; /* Use flexbox for layout */
-    justify-content: space-around; /* Space items evenly */
+    justify-content: space-between; /* Space items evenly */
     align-items: center; /* Vertically center the items */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
     white-space: nowrap; /* Prevent wrapping of navigation items */
+    overflow: hidden; /* Hide overflow */
+    max-width: 100%; /* Ensure nav doesn't exceed container */
 }
 
 .nav a {
@@ -13,7 +15,6 @@
     text-decoration: none;
     padding: 10px 20px; /* Adjusted for better spacing */
     font-size: 1.5em; /* Default font size */
-    flex-grow: 1; /* Allow links to grow and fill available space */
     text-align: center; /* Center text within the link */
     transition: background-color 0.3s, color 0.3s, border-radius 0.3s; /* Smooth transition for hover effects */
     border-radius: 5px; /* Adds rounded edges by default */

@@ -36,12 +36,12 @@
 
 @media (max-width: 480px) {
     .nav {
-        padding: 5px; /* Reduced padding for very small screens */
+        padding: 4px; /* Reduced padding for very small screens */
     }
 
     .nav a {
-        font-size: 1em; /* Further reduce font size for mobile */
-        padding: 8px 10px; /* Smaller padding */
+        font-size: 0.9em; /* Further reduce font size for mobile */
+        padding: 7px 9px; /* Smaller padding */
     }
 }
 

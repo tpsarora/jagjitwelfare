@@ -2,7 +2,7 @@
     background-color: #600000; /* Darker Maroon */
     padding: 10px;
     display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Space items evenly */
+    justify-content: center; /* Space items evenly */
     align-items: center; /* Vertically center the items */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
     white-space: nowrap; /* Prevent wrapping of navigation items */

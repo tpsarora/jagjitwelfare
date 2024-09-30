@@ -17,6 +17,7 @@
 
 .nav a {
     background-color: white;
+    color: black;
     text-decoration: none;
     padding: 10px 20px; /* Adjusted for better spacing */
     font-size: 1.5em; /* Default font size */
@@ -43,7 +44,6 @@
     .nav a {
         font-size: 1.2em; /* Keep the font size the same */
         padding: 10px 15px; /* Maintain padding for touch targets */
-        background-color: #8B0000; /* Maintain background color for tabs */
         flex: 1 1 auto; /* Allows flexible growth but maintains proportions */
         white-space: nowrap; /* Prevents text from wrapping within the tabs */
     }
@@ -60,7 +60,6 @@
         font-size: 0.9em; /* Keep font size consistent */
         padding: 7px 15px; /* Adjust padding for small screens */
         margin: 5px 0; /* Stack items vertically with minimal margin */
-        background-color: #8B0000; /* Maintain tab background color */
         border-radius: 5px; /* Rounded edges for tab look */
         white-space: nowrap; /* Prevents text from wrapping within the tabs */
         flex: 1 1 auto; /* Allows flexible growth but maintains proportions */

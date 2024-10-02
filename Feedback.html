@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en"> <link rel="stylesheet" href="commonstyles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
@@ -14,6 +15,14 @@
       font-weight: bold;
     }
 
+=======
+<html lang="en">
+<link rel="stylesheet" href="commonstyles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+  <style>
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
     .hidden {
       display: none;
     }
@@ -26,15 +35,23 @@
       text-align: center;
     }
 
+<<<<<<< HEAD
     form.name {
       display: flex;
       flex-direction: column;
       max-width: 400px;
       width: 400px;
+=======
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 80%; /* Change to 100% for responsiveness */
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
       margin-top: 30px;
       padding-bottom: 50px;
     }
 
+<<<<<<< HEAD
     form.email {
       display: flex;
       flex-direction: column;
@@ -60,13 +77,39 @@
 }
     .quotes {
       font-family: 'Century Gothic';
+=======
+    .contact_container {
+      display: flex;
+      flex-direction: column; /* Stack vertically on smaller screens */
+      margin: 20px;
+    }
+
+    @media (min-width: 600px) {
+      .contact_container {
+        flex-direction: row; /* Switch to row on larger screens */
+      }
+    }
+
+    .contact_container > * {
+      flex-grow: 1;
+      flex-basis: 0;
+      min-width: 0;
+      margin: 0 10px; /* Add margin for spacing */
+    }
+
+    .quotes {
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
       font-weight: bold;
       font-size: larger;
       padding: 1px;
       margin: 5px;
+<<<<<<< HEAD
       margin-left: 30px;
       
       /* Maroon */
+=======
+      text-align: center;
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
     }
 
     input,
@@ -75,7 +118,10 @@
       margin-top: 5px;
       margin-bottom: 35px;
       padding: 8px;
+<<<<<<< HEAD
       font-family: 'Century Gothic';
+=======
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
       width: 100%;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -85,7 +131,10 @@
     button {
       cursor: pointer;
       margin-top: 10px;
+<<<<<<< HEAD
       font-family: 'Century Gothic';
+=======
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
       font-weight: bold;
       font-size: larger;
       background-color: transparent;
@@ -105,6 +154,7 @@
       display: flex;
       margin-top: 20px;
       flex-direction: column;
+<<<<<<< HEAD
       gap: 50x;
     }
 
@@ -112,10 +162,44 @@
       width: 500px;
     }
   </style>
+=======
+      gap: 50px;
+      align-items: center;
+    }
+
+    .responsive-image {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
+      object-fit: contain;
+    }
+
+    .contact-form {
+      width: 100%; /* Change to 100% for responsiveness */
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 600px) {
+      .contact_container {
+        margin: 20px; /* Reduce margin on smaller screens */
+      }
+
+      form {
+        max-width: 90%; /* Allow forms to fill more space on smaller screens */
+      }
+
+      button {
+        font-size: medium; /* Adjust font size for smaller screens */
+      }
+    }
+  </style>
+
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
 </head>
 
 
 <body>
+<<<<<<< HEAD
 <nav class="nav">
   <a href="index.html">Home</a>
   <a href="Aboutus.html">About Us</a>
@@ -167,6 +251,59 @@
   </div>
 </div>
 
+=======
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="Aboutus.html">About Us</a>
+    <a href="Offerings.html">Offerings</a>
+    <a href="Purposeoflife.html">Purpose of Life</a>
+    <a href="Contactus.html">Contact Us</a>
+    <a href="Feedback.html">Feedback</a>
+  </nav>
+
+  <div Class="contact_container">
+    <div class="contact-image">
+      <img src="Your-Feedback-Matters.png" class="responsive-image">
+
+      <div class="quotes">
+        "Strive for continuous improvement, instead of perfection."
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h2>Please share your Feedback</h2>
+      <form class="contact" id="feedbackForm">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <div>
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="contact@example.com">
+        </div>
+
+        <div>
+          <label for="mobile">Mobile Number</label>
+          <input type="text" id="mobile" name="mobile" placeholder="mobile" required>
+        </div>
+
+        <div>
+          <label for="feedback">Your Feedback</label>
+          <textarea id="feedback" name="feedback" maxlength="256" required></textarea>
+
+        </div>
+
+        <button type="button" onclick="submitForm()">Submit</button>
+
+        <input id="honeypot" class="hidden" type="text" />
+
+        <div id="status" class="center-text"></div>
+      </form>
+    </div>
+  </div>
+
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
   <script>
     function submitForm() {
       var name = document.getElementById("name").value;
@@ -194,6 +331,12 @@
       });
     }
   </script>
+<<<<<<< HEAD
 </div>
 </body>
+=======
+  </div>
+</body>
+
+>>>>>>> 246919be88b356c988abf655f0517be2e37d18ff
 </html>

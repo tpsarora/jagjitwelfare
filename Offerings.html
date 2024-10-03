@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer and Download</title>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,6 +67,17 @@
             .gallery-item h5 { font-size: 1.2em; }
             .gallery-item p { font-size: 0.8em; }
         }
+        h3 {
+            text-align: center; /* Center aligns the heading */
+        }
+        img {
+            max-width: 25%; /* Make image responsive */
+            height: auto;
+            display: block; /* Treats the image as a block element */
+            margin: 0 auto; /* Centers the image horizontally */
+            margin-bottom: 50px; /* Adjust this value for more or less spacing */
+        }
+
     </style>
 </head>
 <body>
@@ -207,8 +221,15 @@
             </div>
         </section>
     </main>
+    <h3>Download Brochure</h3>
 
+        <!-- Download Link -->
+    <a href="Jagjit_Welfare.jpeg" download>
+        <img src="Jagjit_Welfare.jpeg" alt="Description of the image">
+    </a>
+<br>
     <footer>
+        <br>
         &copy; 2024 Jagjit Welfare Trust. All Rights Reserved.
     </footer>
 </body>

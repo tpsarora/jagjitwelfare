@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Medical Device Rental</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+</head>
+
+<body>
+    <h1>Medical Device Rental</h1>
+
+    <h2>Add New Device</h2>
+    <form id="deviceForm">
+        <label for="deviceID">Device ID:</label>
+        <input type="text" id="deviceID" required>
+        <label for="deviceName">Name:</label>
+        <input type="text" id="deviceName" required>
+        <label for="deviceStock">Stock:</label>
+        <input type="number" id="deviceStock" required>
+        <button type="submit">Add Device</button>
+    </form>
+
+    <h2>Available Devices</h2>
+    <ul id="devicesList"></ul>
+
+    <script type="module">
+        // Import necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Get Devices function
+        async function getDevices() {
+            const devicesList = document.getElementById("devicesList");
+            devicesList.innerHTML = ""; // Clear previous list
+
+            const devicesCollection = collection(db, "Devices");
+            try {
+                const snapshot = await getDocs(devicesCollection);
+                if (snapshot.empty) {
+                    devicesList.innerHTML = "<li>No devices found.</li>";
+                } else {
+                    snapshot.forEach(doc => {
+                        const deviceData = doc.data();
+                        const deviceID = doc.id; // Access the Document ID
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `ID: ${deviceData.DeviceID}, Name: ${deviceData.Name}, Stock: ${deviceData.Stock}`;
+                        devicesList.appendChild(listItem);
+                    });
+                }
+            } catch (error) {
+                console.error("Error getting devices:", error);
+                devicesList.innerHTML = "<li>Error loading devices.</li>";
+            }
+        }
+
+        // Handle form submission to add a device
+        document.getElementById('deviceForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the default form submission
+
+            const deviceID = document.getElementById('deviceID').value;
+            const deviceName = document.getElementById('deviceName').value;
+            const deviceStock = document.getElementById('deviceStock').value;
+
+            try {
+                // Add a new document to the "Devices" collection
+                await addDoc(collection(db, "Devices"), {
+                    DeviceID: deviceID,
+                    Name: deviceName,
+                    Stock: parseInt(deviceStock) // Ensure stock is stored as a number
+                });
+
+                // Clear the form fields
+                document.getElementById('deviceForm').reset();
+
+                // Refresh the device list
+                getDevices();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        });
+
+        // Call function to load data on page load
+        getDevices();
+    </script>
+</body>
+
+</html>

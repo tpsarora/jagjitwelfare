@@ -36,6 +36,17 @@
             border-left: 2px solid #800000;
             /* Maroon */
         }
+.tav {
+    background-color: #600000; /* Darker Maroon */
+    padding: 1px;
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Space items evenly */
+    align-items: center; /* Vertically center the items */
+    flex-wrap: wrap; /* Allows items to wrap into new rows */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); /* Adds subtle shadow for depth */
+    max-width: 100%; /* Ensure nav doesn't exceed container */
+    gap: 1px;
+}
     </style>
 </head>
 
@@ -77,6 +88,9 @@
     </main>
 
     <footer>
+        <tav class="nav">
+            <a href="Blood Donors.html">Blood Donors</a>
+        </tav>
         &copy; 2024 Jagjit Welfare Trust. All Rights Reserved.
     </footer>
 </body>

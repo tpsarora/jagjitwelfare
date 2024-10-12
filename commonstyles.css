@@ -3,6 +3,10 @@
     font-family: Arial, sans-serif;
 }
 
+.container-margin {
+    margin: 10px;
+}
+
 .nav {
     background-color: #600000; /* Darker Maroon */
     padding: 5px;

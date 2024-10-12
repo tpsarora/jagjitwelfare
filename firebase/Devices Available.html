@@ -2,31 +2,28 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="commonstyles.css">
+    <link rel="stylesheet" href="../commonstyles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="commonstyles.css">
-    
+
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
 
-        h1, h2 {
+    <style>
+        h1,
+        h2 {
             color: #333;
         }
 
-        #availableDevicesTable, #issuedDevicesTable {
+        #availableDevicesTable,
+        #issuedDevicesTable {
             margin-top: 20px;
             border-collapse: collapse;
             width: 100%;
         }
 
-        #availableDevicesTable th, #availableDevicesTable td {
+        #availableDevicesTable th,
+        #availableDevicesTable td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
@@ -37,41 +34,30 @@
             font-weight: bold;
         }
 
-        .nav {
-            margin-bottom: 20px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: maroon;
+            /* Maroon background */
+            color: white;
+            /* White text color */
         }
 
-        .nav a {
-            margin-right: 15px;
-            color: #0056b3;
-            text-decoration: none;
+        th {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid white;
+            /* Optional: border for headers */
         }
 
-        .nav a:hover {
-            text-decoration: underline;
+        td {
+            padding: 10px;
+            text-align: left;
+            background-color: white;
+            border-bottom: 2px solid black;
+            /* Optional: border for headers */
+            color: black;
         }
-        
-    table 
-        {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: maroon; /* Maroon background */
-        color: white; /* White text color */
-        }
-    th 
-    {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 2px solid white; /* Optional: border for headers */
-    }
-    td 
-    {
-        padding: 10px;
-        text-align: left;
-        background-color: white; 
-        border-bottom: 2px solid black; /* Optional: border for headers */
-        color: black; 
-    } 
     </style>
 </head>
 
@@ -86,29 +72,33 @@
         <a href="Return Register-AED.html">Devices Returned</a>
     </nav>
 
-    <h2>Available Devices</h2>
-    <div id="loadingAvailable" class="loading" style="display: none;">Loading available devices...</div>
-    <table id="availableDevicesTable">
-        <thead>
-            <tr>
-                <th>Device Name</th>
-                <th>Device IDs</th>
-            </tr>
-        </thead>
-        <tbody id="availableDevicesList"></tbody>
-    </table>
+    <div class="container-margin">
 
-    <div id="loadingIssued" class="loading" style="display: none;">Loading issued devices...</div>
-    <table id="issuedDevicesTable">
-        <thead>
-            <tr>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody id="issuedDevicesList"></tbody>
-    </table>
+        <h2>Available Devices</h2>
+        <div id="loadingAvailable" class="loading" style="display: none;">Loading available devices...</div>
+        <table id="availableDevicesTable">
+            <thead>
+                <tr>
+                    <th>Device Name</th>
+                    <th>Device IDs</th>
+                </tr>
+            </thead>
+            <tbody id="availableDevicesList"></tbody>
+        </table>
 
-    <div id="patientInfo"></div>
+        <div id="loadingIssued" class="loading" style="display: none;">Loading issued devices...</div>
+        <table id="issuedDevicesTable">
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="issuedDevicesList"></tbody>
+        </table>
+
+        <div id="patientInfo"></div>
+
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";

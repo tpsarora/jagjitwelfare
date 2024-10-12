@@ -2,16 +2,11 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="commonstyles.css">
+    <link rel="stylesheet" href="../commonstyles.css">
     <title>Medical Device Rental</title>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
         h1,
         h2 {
             color: #333;
@@ -80,47 +75,52 @@
         <a href="Register for Issued Devices-AED.html">Devices Issued</a>
         <a href="Return Register-AED.html">Devices Returned</a>
     </nav>
-    <h1>Patient Details - Register for Issued Devices</h1>
 
-    <div id="messageArea"></div>
+    <div class="container-margin">
 
-    <form id="IssueForm">
-        <input type="hidden" id="deviceId">
+        <h1>Patient Details - Register for Issued Devices</h1>
 
-        <label for="DeviceID">Device:</label>
-        <select id="ID" required>
-            <option value="">Select Device</option>
-        </select>
+        <div id="messageArea"></div>
 
-        <label for="PatientID">Patient:</label>
-        <select id="PatientID" required>
-            <option value="">Select Patient</option>
-        </select>
+        <form id="IssueForm">
+            <input type="hidden" id="deviceId">
 
-        <label for="Date_Issued">Date of Issue:</label>
-        <input type="date" id="Date_Issued" required>
+            <label for="DeviceID">Device:</label>
+            <select id="ID" required>
+                <option value="">Select Device</option>
+            </select>
 
-        <label for="Date_Returned">Date of Return:</label>
-        <input type="date" id="Date_Returned"> <!-- Optional field -->
+            <label for="PatientID">Patient:</label>
+            <select id="PatientID" required>
+                <option value="">Select Patient</option>
+            </select>
 
-        <button type="submit">Save Device</button>
-    </form>
+            <label for="Date_Issued">Date of Issue:</label>
+            <input type="date" id="Date_Issued" required>
 
-    <table id="devicesIssued">
-        <thead>
-            <tr>
-                <th>Serial Number</th>
-                <th>Patient ID</th>
-                <th>Patient Name</th>
-                <th>Device ID</th>
-                <th>Device Name</th>
-                <th>Date of Issue</th>
-                <th>Date of Return</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+            <label for="Date_Returned">Date of Return:</label>
+            <input type="date" id="Date_Returned"> <!-- Optional field -->
+
+            <button type="submit">Save Device</button>
+        </form>
+
+        <table id="devicesIssued">
+            <thead>
+                <tr>
+                    <th>Serial Number</th>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Device ID</th>
+                    <th>Device Name</th>
+                    <th>Date of Issue</th>
+                    <th>Date of Return</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
@@ -347,6 +347,3 @@
 </body>
 
 </html>
-
-
-

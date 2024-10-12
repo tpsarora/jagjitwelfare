@@ -2,17 +2,13 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="commonstyles.css">
+    <link rel="stylesheet" href="../commonstyles.css">
     <title>Jagjit Welfare Trust</title>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1, h2 {
+        h1,
+        h2 {
             color: #333;
         }
 
@@ -20,7 +16,8 @@
             margin-bottom: 20px;
         }
 
-        input, button {
+        input,
+        button {
             margin: 5px 0;
         }
 
@@ -68,7 +65,8 @@
                 flex-direction: column;
             }
 
-            input, button {
+            input,
+            button {
                 width: 100%;
             }
         }
@@ -85,48 +83,52 @@
         <a href="Register for Issued Devices-AED.html">Devices Issued</a>
         <a href="Return Register-AED.html">Devices Returned</a>
     </nav>
-    
-    <h1>Jagjit Welfare Trust - Maintain Devices</h1>
 
-    <div id="messageArea"></div>
+    <div class="container-margin">
 
-    <form id="deviceForm" style="display: flex; flex-wrap: wrap; align-items: center;">
-        <input type="hidden" id="deviceId">
-        
-        <label for="ID" style="margin-right: 5px;">Device ID:</label>
-        <input type="text" id="ID" required style="margin-right: 10px;">
-        
-        <label for="deviceName" style="margin-right: 5px;">Name:</label>
-        <input type="text" id="deviceName" required style="margin-right: 10px;">
-        
-        <label for="DP" style="margin-right: 5px;">Date of Purchase:</label>
-        <input type="date" id="DP" required style="margin-right: 10px;">
-        
-        <label for="PP" style="margin-right: 5px;">Purchase Price:</label>
-        <input type="number" id="PP" required style="margin-right: 10px;">
-        
-        <label for="PF" style="margin-right: 5px;">Purchased From:</label>
-        <input type="text" id="PF" required style="margin-right: 10px;">
+        <h1>Jagjit Welfare Trust - Maintain Devices</h1>
 
-        <div style="width: 100%; margin-top: 10px;">
-            <button type="submit">Save Device</button>
-        </div>
-    </form>
+        <div id="messageArea"></div>
 
-    <table id="devicesTable">
-        <thead>
-            <tr>
-                <th class="serial">Serial No.</th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Date of Purchase</th>
-                <th>Purchase Price</th>
-                <th>Purchased From</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="devicesList"></tbody>
-    </table>
+        <form id="deviceForm" style="display: flex; flex-wrap: wrap; align-items: center;">
+            <input type="hidden" id="deviceId">
+
+            <label for="ID" style="margin-right: 5px;">Device ID:</label>
+            <input type="text" id="ID" required style="margin-right: 10px;">
+
+            <label for="deviceName" style="margin-right: 5px;">Name:</label>
+            <input type="text" id="deviceName" required style="margin-right: 10px;">
+
+            <label for="DP" style="margin-right: 5px;">Date of Purchase:</label>
+            <input type="date" id="DP" required style="margin-right: 10px;">
+
+            <label for="PP" style="margin-right: 5px;">Purchase Price:</label>
+            <input type="number" id="PP" required style="margin-right: 10px;">
+
+            <label for="PF" style="margin-right: 5px;">Purchased From:</label>
+            <input type="text" id="PF" required style="margin-right: 10px;">
+
+            <div style="width: 100%; margin-top: 10px;">
+                <button type="submit">Save Device</button>
+            </div>
+        </form>
+
+        <table id="devicesTable">
+            <thead>
+                <tr>
+                    <th class="serial">Serial No.</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Date of Purchase</th>
+                    <th>Purchase Price</th>
+                    <th>Purchased From</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="devicesList"></tbody>
+        </table>
+
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
@@ -200,7 +202,7 @@
             const deviceID = document.getElementById('deviceId').value;
             const newDeviceID = document.getElementById('ID').value;
             const deviceName = document.getElementById('deviceName').value;
-            const deviceDP = document.getElementById('DP').value; 
+            const deviceDP = document.getElementById('DP').value;
             const devicePP = Math.floor(parseFloat(document.getElementById('PP').value));
             const devicePF = document.getElementById('PF').value;
 
@@ -216,7 +218,7 @@
                     });
 
                     document.getElementById('deviceForm').reset();
-                    document.getElementById('deviceId').value = ""; 
+                    document.getElementById('deviceId').value = "";
                     showMessage("Device updated successfully!");
                     getDevices();
                 } catch (error) {
@@ -243,16 +245,16 @@
             }
         });
 
-        window.editDevice = function(ID, deviceData) {
+        window.editDevice = function (ID, deviceData) {
             document.getElementById('deviceId').value = ID;
             document.getElementById('ID').value = deviceData.ID;
             document.getElementById('deviceName').value = deviceData.Name;
-            document.getElementById('DP').value = deviceData.DP; 
-            document.getElementById('PP').value = deviceData.PP; 
-            document.getElementById('PF').value = deviceData.PF; 
+            document.getElementById('DP').value = deviceData.DP;
+            document.getElementById('PP').value = deviceData.PP;
+            document.getElementById('PF').value = deviceData.PF;
         };
 
-        window.deleteDevice = async function(ID) {
+        window.deleteDevice = async function (ID) {
             if (confirm("Are you sure you want to delete this device?")) {
                 try {
                     await deleteDoc(doc(db, "Devices1", ID));

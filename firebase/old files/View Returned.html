@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Medical Device Rental</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        #devicesList {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #patientInfo {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Medical Device Rental</h1>
+
+    <h2>Available Devices</h2>
+    <ul id="devicesList"></ul>
+
+    <h2>Patient Information</h2>
+    <div id="patientInfo"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Get Issued Devices
+        async function getIssued() {
+            const issuedList = document.getElementById("devicesList");
+            issuedList.innerHTML = ""; // Clear previous list
+
+            const snapshot = await getDocs(collection(db, "Issue"));
+            snapshot.forEach(doc => {
+                const issuedData = doc.data();
+                const issuedID = doc.id; // Access the Document ID
+                
+                // Check if Date_Returned is not set or is '0' or 'Not Returned'
+                if (!issuedData.Date_Returned || issuedData.Date_Returned === 'null') 
+                {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${issuedData.ID} - Patient ID: ${issuedData.PatientID} - Date Issued: ${issuedData.Date_Issued} - Date Returned: ${issuedData.Date_Returned || 'Not Returned'}`;
+                    issuedList.appendChild(listItem);
+                }
+            });
+        }
+
+        // Get Patient Information
+        async function getPatientInfo(patientID) {
+            const patientInfoDiv = document.getElementById("patientInfo");
+            const patientDoc = await getDoc(doc(db, "Patients", patientID)); // Assuming you have a "Patients" collection
+
+            if (patientDoc.exists()) {
+                const patientData = patientDoc.data();
+                patientInfoDiv.textContent = `Patient ID: ${patientData.ID}, Name: ${patientData.Name}, Contact: ${patientData.Contact || 'N/A'}`;
+            } else {
+                patientInfoDiv.textContent = "No patient found.";
+            }
+        }
+
+        // Call functions to load data on page load
+        getIssued();
+        getPatientInfo("PT-001"); // Replace "PT-001" with the actual patient ID
+    </script>
+</body>
+</html>

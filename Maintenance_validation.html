@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="commonstyles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #f9f9f9;
+            margin-left: 120px;
+            /* Space to the left to avoid overlap with the button */
+            align-items: center;
+        }
+
+        .home-button {
+            position: absolute;
+            /* Positions the button */
+            left: 20px;
+            /* Distance from the left */
+        }
+
+        .container {
+            width: calc(100% - 20px); /* Full width minus horizontal margins */
+            max-width: 800px;
+            margin: 20px 10px;
+            padding: 20px;
+            border: 1px solid #800000;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-sizing: border-box; /* Ensures padding and border are included in width */
+        }
+
+        .contact-info {
+            margin-bottom: 20px;
+        }
+
+        .contact-info h2 {
+            color: #800000;
+            /* Maroon color */
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .contact-info p {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+
+        .contact-info a {
+            color: #800000;
+            /* Maroon color */
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Graphics */
+        .contact-info img {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .contact-info .email img,
+        .contact-info .mobile img {
+            width: 24px;
+            /* Adjust the size as needed */
+            height: 24px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="styles.css">
+
+
+</head>
+
+<body>
+    <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="Aboutus.html">About Us</a>
+        <a href="Offerings.html">Offerings</a>
+        <a href="Purposeoflife.html">Purpose of Life</a>
+        <a href="Contactus.html">Contact Us</a>
+        <a href="Feedback.html">Feedback</a>
+    </nav>
+
+    <div class="header">
+        <h1>Maintain Devices & Patient Details</h1>
+    </div>
+
+    <div class="container">
+        <form id="PasswordForm">
+            <label for="Name">Name:</label>
+            <select id="Name" required>
+                <option value="">Select Name</option>
+                <option value="Tavinder">Tavinder</option> <!-- Added an example name -->
+            </select>
+
+            <label for="Password">Password:</label>
+            <input type="password" id="Password" required placeholder="Enter your password"> <!-- Changed to text box -->
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <footer>
+        &copy; 2024 Jagjit Welfare Trust. All Rights Reserved.
+    </footer>
+
+    <script>
+        document.getElementById("PasswordForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const selectedName = document.getElementById("Name").value;
+            const enteredPassword = document.getElementById("Password").value;
+
+            // Verify password
+            if (enteredPassword === "arora") {
+                alert(`Welcome, ${selectedName}!`);
+                window.location.href = "Maintenance_Landing_Page.html";
+             }
+             else {
+                alert("Invalid password. Please try again.");
+            }
+        });
+    </script>
+</body>
+
+</html>

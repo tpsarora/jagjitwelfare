@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            margin-left: 10px;
+        }
+        #loadingMessage, #errorMessage {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Patients Details</h1>
+
+    <h2>Add or Edit Patients Data</h2>
+    <form id="PatientsForm">
+        <input type="hidden" id="PatientId"> <!-- Hidden field for Patient ID -->
+        <label for="PatientID">Patient ID:</label>
+        <input type="text" id="PatientID" required>
+        <label for="Name">Patient Name:</label>
+        <input type="text" id="Name" required>
+        <label for="Mobile">Mobile Number:</label>
+        <input type="text" id="Mobile" required pattern="\d{10}" title="Please enter a valid 10-digit mobile number">
+        <label for="Address">Address:</label>
+        <input type="text" id="Address" required>
+        <label for="City">City:</label>
+        <input type="text" id="City" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Available Patients</h2>
+    <p id="loadingMessage" style="display:none;">Loading Patients...</p>
+    <div id="errorMessage"></div>
+    <ul id="PatientsList"></ul>
+
+    <script type="module">
+        // Import necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Get Patients function
+        async function getPatients() {
+            const loadingMessage = document.getElementById("loadingMessage");
+            loadingMessage.style.display = "block"; // Show loading message
+            const PatientsList = document.getElementById("PatientsList");
+            PatientsList.innerHTML = ""; // Clear previous list
+
+            const PatientsCollection = collection(db, "Patients");
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = ""; // Clear previous error message
+
+            try {
+                // Get documents and sort by PatientID
+                const snapshot = await getDocs(PatientsCollection);
+                const patientsArray = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Sort the patients array by PatientID
+                patientsArray.sort((a, b) => a.PatientID.localeCompare(b.PatientID));
+
+                if (patientsArray.length === 0) {
+                    PatientsList.innerHTML = "<li>No Patients found.</li>";
+                } else {
+                    patientsArray.forEach(PatientsData => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `ID: ${PatientsData.PatientID}, Name: ${PatientsData.Name}, Mobile: ${PatientsData.Mobile}, Address: ${PatientsData.Address}, City: ${PatientsData.City}`;
+                        
+                        // Create an edit button
+                        const editButton = document.createElement("button");
+                        editButton.textContent = "Edit";
+                        editButton.onclick = () => editPatients(PatientsData.id, PatientsData);
+                        
+                        // Create a delete button
+                        const deleteButton = document.createElement("button");
+                        deleteButton.textContent = "Delete";
+                        deleteButton.onclick = () => deletePatients(PatientsData.id);
+
+                        listItem.appendChild(editButton);
+                        listItem.appendChild(deleteButton);
+                        PatientsList.appendChild(listItem);
+                    });
+                }
+            } catch (error) {
+                console.error("Error getting Patients:", error);
+                errorMessage.textContent = "Error loading Patients.";
+            } finally {
+                loadingMessage.style.display = "none"; // Hide loading message
+            }
+        }
+
+        // Handle form submission to add or edit a Patient Details
+        document.getElementById('PatientsForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the default form submission
+
+            const PatientID = document.getElementById('PatientId').value;
+            const newPatientID = document.getElementById('PatientID').value;
+            const PatientName = document.getElementById('Name').value;
+            const PatientMobile = document.getElementById('Mobile').value;
+            const PatientAddress = document.getElementById('Address').value;
+            const PatientCity = document.getElementById('City').value;
+
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = ""; // Clear previous error message
+
+            if (PatientID) {
+                // Update existing document
+                try {
+                    const patientRef = doc(db, "Patients", PatientID);
+                    await updateDoc(patientRef, {
+                        PatientID: newPatientID,
+                        Name: PatientName,
+                        Mobile: PatientMobile,
+                        Address: PatientAddress,
+                        City: PatientCity
+                    });
+
+                    // Clear the form fields
+                    document.getElementById('PatientsForm').reset();
+                    document.getElementById('PatientId').value = ""; // Clear hidden ID
+
+                    // Refresh the Patient list
+                    getPatients();
+                } catch (error) {
+                    console.error("Error updating document: ", error);
+                    errorMessage.textContent = "Error updating patient.";
+                }
+            } else {
+                // Add a new document
+                try {
+                    await addDoc(collection(db, "Patients"), {
+                        PatientID: newPatientID,
+                        Name: PatientName,
+                        Mobile: PatientMobile,
+                        Address: PatientAddress,
+                        City: PatientCity
+                    });
+
+                    // Clear the form fields
+                    document.getElementById('PatientsForm').reset();
+
+                    // Refresh the Patient list
+                    getPatients();
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    errorMessage.textContent = "Error adding patient.";
+                }
+            }
+        });
+
+        // Function to populate form for editing
+        function editPatients(PatientID, PatientsData) {
+            document.getElementById('PatientId').value = PatientID; // Set hidden field to the Patient ID
+            document.getElementById('PatientID').value = PatientsData.PatientID;
+            document.getElementById('Name').value = PatientsData.Name;
+            document.getElementById('Mobile').value = PatientsData.Mobile;
+            document.getElementById('Address').value = PatientsData.Address;
+            document.getElementById('City').value = PatientsData.City;
+        }
+
+        // Function to delete a Patients Record
+        async function deletePatients(PatientID) {
+            if (confirm("Are you sure you want to delete this Patient?")) {
+                try {
+                    await deleteDoc(doc(db, "Patients", PatientID));
+                    getPatients(); // Refresh the list after deletion
+                } catch (error) {
+                    console.error("Error deleting document: ", error);
+                }
+            }
+        }
+
+        // Call function to load data on page load
+        getPatients();
+    </script>
+</body>
+
+</html>

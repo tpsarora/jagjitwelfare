@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="commonstyles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="commonstyles.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        #availableDevicesTable, #issuedDevicesTable {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #availableDevicesTable th, #availableDevicesTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .loading {
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .nav {
+            margin-bottom: 20px;
+        }
+
+        .nav a {
+            margin-right: 15px;
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        
+    table 
+        {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: maroon; /* Maroon background */
+        color: white; /* White text color */
+        }
+    th 
+    {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 2px solid white; /* Optional: border for headers */
+    }
+    td 
+    {
+        padding: 10px;
+        text-align: left;
+        background-color: white; 
+        border-bottom: 2px solid black; /* Optional: border for headers */
+        color: black; 
+    } 
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <a href="Patients-AED.html">Patients</a>
+        <a href="Devices-AED.html">Devices</a>
+        <a href="Total Inventory.html">Inventory</a>
+        <a href="Devices Available.html">Devices Available</a>
+        <a href="Issue Register-AED.html">Issue Register</a>
+        <a href="Register for Issued Devices-AED.html">Devices Issued</a>
+        <a href="Return Register-AED.html">Devices Returned</a>
+    </nav>
+
+    <h2>Available Devices</h2>
+    <div id="loadingAvailable" class="loading" style="display: none;">Loading available devices...</div>
+    <table id="availableDevicesTable">
+        <thead>
+            <tr>
+                <th>Device Name</th>
+                <th>Device IDs</th>
+            </tr>
+        </thead>
+        <tbody id="availableDevicesList"></tbody>
+    </table>
+
+    <div id="loadingIssued" class="loading" style="display: none;">Loading issued devices...</div>
+    <table id="issuedDevicesTable">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="issuedDevicesList"></tbody>
+    </table>
+
+    <div id="patientInfo"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY", // Replace with your API key
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function getDevices() {
+            const loadingAvailable = document.getElementById("loadingAvailable");
+            loadingAvailable.style.display = "block";
+            const availableList = document.getElementById("availableDevicesList");
+            availableList.innerHTML = "";
+
+            try {
+                const snapshot = await getDocs(collection(db, "Devices1"));
+                loadingAvailable.style.display = "none";
+
+                const devices = snapshot.docs.map(doc => ({
+                    id: doc.data().ID,
+                    name: doc.data().Name
+                }));
+
+                return devices;
+            } catch (error) {
+                loadingAvailable.style.display = "none";
+                console.error("Error getting available devices:", error);
+                return [];
+            }
+        }
+
+        async function getIssuedDevices() {
+            const loadingIssued = document.getElementById("loadingIssued");
+            loadingIssued.style.display = "block";
+
+            try {
+                const snapshot = await getDocs(collection(db, "Issue"));
+                loadingIssued.style.display = "none";
+
+                const issuedDevices = snapshot.docs
+                    .filter(doc => !doc.data().Date_Returned || doc.data().Date_Returned === 'null')
+                    .map(doc => doc.data().ID);
+
+                return issuedDevices;
+            } catch (error) {
+                loadingIssued.style.display = "none";
+                console.error("Error getting issued devices:", error);
+                return [];
+            }
+        }
+
+        async function displayAvailableDevices() {
+            const availableDevices = await getDevices();
+            const issuedDevices = await getIssuedDevices();
+
+            const availableFiltered = availableDevices.filter(device => !issuedDevices.includes(device.id));
+
+            const availableList = document.getElementById("availableDevicesList");
+            availableList.innerHTML = "";
+
+            // Group devices by name
+            const groupedDevices = {};
+            availableFiltered.forEach(device => {
+                if (!groupedDevices[device.name]) {
+                    groupedDevices[device.name] = [];
+                }
+                groupedDevices[device.name].push(device.id);
+            });
+
+            // Sort the device names alphabetically
+            const sortedDeviceNames = Object.keys(groupedDevices).sort();
+
+            // Populate the table with grouped devices
+            sortedDeviceNames.forEach(name => {
+                const row = document.createElement("tr");
+                const nameCell = document.createElement("td");
+                const idCell = document.createElement("td");
+
+                const count = groupedDevices[name].length; // Get the count of device IDs
+                nameCell.textContent = `${name} (${count} ${count > 1 ? 'Nos' : (count === 1 ? 'No' : 'No devices')})`; // Show name and count// Show name and count
+                idCell.textContent = groupedDevices[name].join(", "); // Join IDs with a comma
+
+                row.appendChild(nameCell);
+                row.appendChild(idCell);
+                availableList.appendChild(row);
+            });
+        }
+        // Load data on page load
+        displayAvailableDevices();
+        getPatientInfo("PT-001"); // Replace with a dynamic input as needed
+    </script>
+</body>
+</html>

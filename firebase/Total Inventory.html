@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="commonstyles.css">
+    <nav class="nav">
+        <a href="Patients-AED.html">Patients</a>
+        <a href="Devices-AED.html">Devices</a>
+        <a href="Total Inventory.html">Inventory</a>
+        <a href="Devices Available.html">Devices Available</a>
+        <a href="Issue Register-AED.html">Issue Register</a>
+        <a href="Register for Issued Devices-AED.html">Devices Issued</a>
+        <a href="Return Register-AED.html">Devices Returned</a>
+    </nav>
+    <title>Medical Device Rental</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: maroon; /* Maroon background */
+            color: white; /* White text color */
+        }
+
+        h1, h2 {
+            color: #fff; /* White color for headers */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: maroon; /* Maroon background */
+            color: white; /* White text color */
+        }
+
+        th {
+            padding: 10px;
+            border-top: 2px solid white; /* Border for headers */
+            border-bottom: 2px solid white; /* Border for headers */
+        }
+
+        th.serial-number {
+            text-align: center; /* Center-align Serial Number header */
+        }
+
+        th.left-align {
+            text-align: left; /* Left-align Device Name and IDs headers */
+        }
+
+        td {
+            padding: 10px;
+            background-color: white; 
+            border-bottom: 2px solid black; /* Border for cells */
+            color: black; 
+        } 
+        
+        .serial-number {
+            text-align: center; /* Center align serial numbers */
+        }
+        
+        .left-align {
+            text-align: left; /* Left align device name and IDs */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Jagjit Welfare Trust - Total Inventory </h1>
+
+    <table id="devicesTable">
+        <thead>
+            <tr>
+                <th class="serial-number">Serial Number</th>
+                <th class="left-align">Device Name</th>
+                <th class="left-align">Device IDs</th>
+            </tr>
+        </thead>
+        <tbody id="devicesList"></tbody>
+    </table>
+
+    <script type="module">
+        // Import the necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Get Devices
+        async function getDevices() {
+            const devicesList = document.getElementById("devicesList");
+            devicesList.innerHTML = ""; // Clear previous list
+
+            const devicesCollection = collection(db, "Devices1");
+            try {
+                const snapshot = await getDocs(devicesCollection);
+                if (snapshot.empty) {
+                    devicesList.innerHTML = "<tr><td colspan='3'>No devices found.</td></tr>"; // Updated colspan
+                } else {
+                    const devices = []; // Array to hold device data
+
+                    snapshot.forEach(doc => {
+                        const deviceData = doc.data();
+                        devices.push({
+                            id: deviceData.ID,
+                            name: deviceData.Name, // Collect Name
+                        });
+                    });
+
+                    // Sort devices by Name and then by Device ID
+                    devices.sort((a, b) => {
+                        if (a.name.localeCompare(b.name) === 0) {
+                            return a.id.localeCompare(b.id); // Sort by ID if names are equal
+                        }
+                        return a.name.localeCompare(b.name);
+                    });
+
+                    // Group devices by Name
+                    const groupedDevices = devices.reduce((acc, device) => {
+                        (acc[device.name] = acc[device.name] || []).push(device);
+                        return acc;
+                    }, {});
+
+                    // Display grouped devices in the table
+                    let serialNumber = 1; // Initialize serial number
+                    for (const name in groupedDevices) {
+                        const deviceGroup = groupedDevices[name];
+                        const count = deviceGroup.length; // Count of devices
+                        
+                        const firstRow = document.createElement("tr");
+                        
+                        const serialsCell = document.createElement("td");
+                        serialsCell.textContent = serialNumber++; // Increment serial number
+                        serialsCell.className = "serial-number"; // Add class for center alignment
+                        firstRow.appendChild(serialsCell);
+                        
+                        const nameCell = document.createElement("td");
+                        nameCell.textContent = `${name} (${count} ${count > 1 ? 'Nos' : (count === 1 ? 'No' : 'No devices')})`;
+                        nameCell.className = "left-align"; // Add class for left alignment
+                        firstRow.appendChild(nameCell);
+                        
+                        const idsCell = document.createElement("td");
+                        idsCell.textContent = deviceGroup.map(device => device.id).join(", "); // Concatenate IDs with commas
+                        idsCell.className = "left-align"; // Add class for left alignment
+                        firstRow.appendChild(idsCell);
+
+                        devicesList.appendChild(firstRow);
+                    }
+                }
+            } catch (error) {
+                console.error("Error getting devices:", error);
+                devicesList.innerHTML = "<tr><td colspan='3'>Error loading devices.</td></tr>"; // Updated colspan
+            }
+        }
+
+        // Call function to load data on page load
+        getDevices();
+    </script>
+</body>
+
+</html>

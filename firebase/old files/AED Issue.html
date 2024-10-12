@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Medical Device Rental</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            margin: 5px 0;
+        }
+        button {
+            cursor: pointer;
+        }
+        #devicesIssued {
+            margin-top: 20px;
+        }
+        #messageArea {
+            margin: 10px 0;
+            color: green; /* Default message color */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Medical Device Rental</h1>
+
+    <div id="messageArea"></div>
+    
+    <h2>Add or Edit Device</h2>
+    <form id="IssueForm">
+        <input type="hidden" id="deviceId"> <!-- Hidden field for device ID -->
+        <label for="ID">Device ID:</label>
+        <input type="text" id="ID" required>
+        <label for="PatientID">Patient ID:</label>
+        <input type="text" id="PatientID" required>
+        <label for="Date_Issued">Date of Issue:</label>
+        <input type="date" id="Date_Issued" required>
+        <label for="Date_Returned">Date of Return:</label>
+        <input type="date" id="Date_Returned"> <!-- Optional field -->
+       
+        <button type="submit">Save Device</button>
+    </form>
+
+    <h2>Devices Issued</h2>
+    <ul id="devicesIssued"></ul>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-GB', options).replace(/(\d{2})\/(\w{3})\/(\d{4})/, '$1-$2-$3');
+        }
+
+        async function getDevices() {
+            const devicesIssued = document.getElementById("devicesIssued");
+            devicesIssued.innerHTML = ""; // Clear previous list
+
+            const devicesCollection = collection(db, "Issue");
+            try {
+                const snapshot = await getDocs(devicesCollection);
+                if (snapshot.empty) {
+                    devicesIssued.innerHTML = "<li>No devices found.</li>";
+                } else {
+                    snapshot.forEach(doc => {
+                        const IssueData = doc.data();
+                        const ID = doc.id; // Access the Document ID
+                        const dateIssued = formatDate(IssueData.Date_Issued);
+                        const dateReturned = IssueData.Date_Returned ? formatDate(IssueData.Date_Returned) : "N/A";
+
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `Device ID: ${IssueData.ID}, Patient ID: ${IssueData.PatientID}, Date of Issue: ${dateIssued}, Date of Return: ${dateReturned}`;
+                        
+                        const editButton = document.createElement("button");
+                        editButton.textContent = "Edit";
+                        editButton.onclick = () => editDevice(ID, IssueData);
+                        
+                        const deleteButton = document.createElement("button");
+                        deleteButton.textContent = "Delete";
+                        deleteButton.onclick = () => deleteDevice(ID);
+
+                        listItem.appendChild(editButton);
+                        listItem.appendChild(deleteButton);
+                        devicesIssued.appendChild(listItem);
+                    });
+                }
+            } catch (error) {
+                console.error("Error getting devices:", error);
+                devicesIssued.innerHTML = "<li>Error loading devices.</li>";
+            }
+        }
+
+        document.getElementById('IssueForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const deviceID = document.getElementById('deviceId').value;
+            const newDeviceID = document.getElementById('ID').value;
+            const devicePatientID = document.getElementById('PatientID').value;
+            const deviceDateIssued = document.getElementById('Date_Issued').value; 
+            const deviceDateReturned = document.getElementById('Date_Returned').value || null; // Optional field
+
+            if (deviceID) {
+                try {
+                    const deviceRef = doc(db, "Issue", deviceID);
+                    await updateDoc(deviceRef, {
+                        ID: newDeviceID,
+                        PatientID: devicePatientID,
+                        Date_Issued: deviceDateIssued,
+                        Date_Returned: deviceDateReturned,
+                    });
+
+                    document.getElementById('IssueForm').reset();
+                    document.getElementById('deviceId').value = ""; 
+                    showMessage("Issue updated successfully!");
+                    getDevices();
+                } catch (error) {
+                    console.error("Error updating document: ", error);
+                    showMessage("Error updating device.", 'red');
+                }
+            } else {
+                try {
+                    await addDoc(collection(db, "Issue"), {
+                        ID: newDeviceID,
+                        PatientID: devicePatientID,
+                        Date_Issued: deviceDateIssued,
+                        Date_Returned: deviceDateReturned,
+                    });
+
+                    document.getElementById('IssueForm').reset();
+                    showMessage("Issued successfully!");
+                    getDevices();
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    showMessage("Error adding device.", 'red');
+                }
+            }
+        });
+
+        function editDevice(ID, IssueData) {
+            document.getElementById('deviceId').value = ID;
+            document.getElementById('ID').value = IssueData.ID;
+            document.getElementById('PatientID').value = IssueData.PatientID; 
+            document.getElementById('Date_Issued').value = IssueData.Date_Issued; 
+            document.getElementById('Date_Returned').value = IssueData.Date_Returned || ""; // Allow empty for optional field
+        }
+
+        async function deleteDevice(ID) {
+            if (confirm("Are you sure you want to delete this device?")) {
+                try {
+                    await deleteDoc(doc(db, "Issue", ID));
+                    showMessage("Issue deleted successfully!");
+                    getDevices();
+                } catch (error) {
+                    console.error("Error deleting document: ", error);
+                    showMessage("Error deleting device.", 'red');
+                }
+            }
+        }
+
+        function showMessage(message, color = 'green') {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = message;
+            messageArea.style.color = color;
+        }
+
+        getDevices();
+    </script>
+</body>
+
+</html>

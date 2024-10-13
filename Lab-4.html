@@ -13,22 +13,30 @@
             margin: 0;
             padding: 0;
         }
-.header{
-        h1 {
+
+        .header {
+            display: flex;
+            align-items: center; /* Vertically center the items */
+            padding: 5px; /* Adjust padding as needed */
+        }
+
+        .header img {
+            margin-right: 10px; /* Space between image and text */
+        }
+
+        .header h1 {
             color: white;
-            text-align: center;
             font-size: 25pt;
-            padding: 0;
+            margin: 0; /* Remove default margin */
         }
-        h2 {
+
+        .header h2 {
             color: white;
-            text-align: center;
             font-size: 10pt;
-            padding: 0;
+            margin: 0; /* Remove default margin */
         }
-    }
-        
-    button {
+
+        button {
             padding: 10px;
             border: none;
             border-radius: 5px;
@@ -42,10 +50,11 @@
         button:hover {
             background-color: darkred; /* Darker shade on hover */
         }
-    .container {
+
+        .container {
             width: calc(100% - 10px);
             max-width: 400px;
-            margin: 5px 5px;
+            margin: 1px 1px;
             padding: 0px;
             border: 1px solid #800000;
             border-radius: 8px;
@@ -58,7 +67,7 @@
         }
 
         td {
-            padding: 6px;
+            padding: 4px;
         }
 
         label {
@@ -82,25 +91,14 @@
     </nav>
 
     <div class="header">
-        <table>
-            <tr>
-                <td style="width: 240px;">
-                    <img src="\Photos\A Square.jpg" width="50" height="50" alt="A Square">
-                 </td>
-                <td>
-                    <h1>A Square Imaging and Pathology Lab - Appointment</h1>
-                    <h2>Location 1:
-                   Shop No DSS-3&4, Basement of Indian Bank, Huda Market, Sector 29, Faridabad-121008
-                   Mobile: 93194 44415</h2>
-                    
-                    <h2>Location 2:
-                   Shop No. 95-96, Plot No. 66B, Hardware Chowk, New Industrial Township, Faridabad-121001
-                   Mobile: 99718 83444</h2>
-                   <h2>Location 3: To be defined</h2>
-                 </td>
-            </tr>
-        </table>
+        <img src="\Photos\A Square.jpg" width="50" height="50" alt="A Square">
+        <div>
+            <h1>A Square Imaging and Pathology Lab - Appointment</h1>
+            <h2>Location 1: Shop No DSS-3&4, Basement of Indian Bank, Huda Market, Sector 29, Faridabad-121008 Mobile: 93194 44415</h2>
+            <h2>Location 2: Shop No. 95-96, Plot No. 66B, Hardware Chowk, New Industrial Township, Faridabad-121001 Mobile: 99718 83444</h2>
+            <h2>Location 3: To be defined</h2>
         </div>
+    </div>
 
     <form id="AppointmentForm" onsubmit="return validateForm()">
         <input type="hidden" id="AppointmentId"> <!-- Hidden field for Appointment ID -->
@@ -152,9 +150,9 @@
                 <td>
                     <select id="Lab_Location" required>
                         <option value="" disabled selected>Select Lab Location</option>
-                        <option value="Location-1">Location-1: Shop No DSS-3&4, Basement Of Indian Bank, Huda Market, Sector 29, Faridabad-121008; Mobile:93194 44415</option>
-                        <option value="Location-2">Location-2:Shop No. 95-96, Plot No. 66B, Hardware Chowk, New Industrial Township, Faridabad-121001; Mobile: 99718 83444</div></option>
-                        <option value="Location-3">Location-3:To be defined</option>
+                        <option value="Location-1">Location-1: Shop No DSS-3&4, Basement Of Indian Bank, Huda Market, Sector 29, Faridabad-121008; Mobile: 93194 44415</option>
+                        <option value="Location-2">Location-2: Shop No. 95-96, Plot No. 66B, Hardware Chowk, New Industrial Township, Faridabad-121001; Mobile: 99718 83444</option>
+                        <option value="Location-3">Location-3: To be defined</option>
                     </select>
                 </td>
             </tr>
@@ -176,13 +174,11 @@
             <tr>
                 <td colspan="2"><button type="submit">Save Lab Appointment</button></td>
             </tr>
-            <br>
         </table>
-        <br>
     </form>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Get the last appointment ID from localStorage or start from 0
             let lastId = localStorage.getItem('lastAppointmentId') || 0;
             const appointmentId = parseInt(lastId) + 1; // Increment the ID
@@ -233,7 +229,7 @@
     <script type="module">
         // Import necessary Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -275,7 +271,7 @@
         // Call function to load data on page load
         getDevices();
     </script>
-    
+
     <footer>
         &copy; 2024 Jagjit Welfare Trust. All Rights Reserved.
     </footer>

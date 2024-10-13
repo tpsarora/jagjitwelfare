@@ -7,22 +7,41 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
     <style>
-        h1,
-        h2 {
+        h1, h2 {
             color: #333;
         }
 
-        form {
-            margin-bottom: 20px;
+        .form-group {
+            display: flex; /* Use flexbox for label-input layout */
+            align-items: center; /* Center vertically */
+            margin-bottom: 10px; /* Space between rows */
         }
 
-        input,
-        button {
-            margin: 5px 0;
+        label {
+            margin-right: 10px; /* Space between label and input */
+            width: 150px; /* Fixed width for labels */
+        }
+
+        input {
+            flex: 1; /* Take remaining space */
+            padding: 5px; /* Padding inside inputs */
+            border: 1px solid #ccc; /* Border around inputs */
+            border-radius: 3px; /* Rounded corners */
         }
 
         button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: maroon;
+            color: white;
             cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px; /* Space between button and inputs */
+        }
+
+        button:hover {
+            background-color: darkred; /* Darker shade on hover */
         }
 
         #devicesTable {
@@ -61,13 +80,16 @@
         }
 
         @media (max-width: 600px) {
-            form {
-                flex-direction: column;
+            .form-group {
+                flex-direction: column; /* Stack vertically on small screens */
             }
 
-            input,
+            label {
+                width: auto; /* Allow labels to take natural width */
+            }
+
             button {
-                width: 100%;
+                margin-left: 0; /* Remove margin on small screens */
             }
         }
     </style>
@@ -78,39 +100,36 @@
         <a href="Patients-AED.html">Patients</a>
         <a href="Devices-AED.html">Devices</a>
         <a href="Total Inventory.html">Inventory</a>
-        <a href="Devices Available.html">Devices Available</a>
-        <a href="Issue Register-AED.html">Issue Register</a>
-        <a href="Register for Issued Devices-AED.html">Devices Issued</a>
-        <a href="Return Register-AED.html">Devices Returned</a>
+        <a href="Devices Available.html">Dev Available</a>
+        <a href="Issue Register-AED.html">Issue Reg</a>
+        <a href="Register for Issued Devices-AED.html">Dev Issued</a>
+        <a href="Return Register-AED.html">Dev Returned</a>
     </nav>
 
     <div class="container-margin">
-
         <h1>Jagjit Welfare Trust - Maintain Devices</h1>
-
         <div id="messageArea"></div>
 
-        <form id="deviceForm" style="display: flex; flex-wrap: wrap; align-items: center;">
-            <input type="hidden" id="deviceId">
-
-            <label for="ID" style="margin-right: 5px;">Device ID:</label>
-            <input type="text" id="ID" required style="margin-right: 10px;">
-
-            <label for="deviceName" style="margin-right: 5px;">Name:</label>
-            <input type="text" id="deviceName" required style="margin-right: 10px;">
-
-            <label for="DP" style="margin-right: 5px;">Date of Purchase:</label>
-            <input type="date" id="DP" required style="margin-right: 10px;">
-
-            <label for="PP" style="margin-right: 5px;">Purchase Price:</label>
-            <input type="number" id="PP" required style="margin-right: 10px;">
-
-            <label for="PF" style="margin-right: 5px;">Purchased From:</label>
-            <input type="text" id="PF" required style="margin-right: 10px;">
-
-            <div style="width: 100%; margin-top: 10px;">
+        <form id="deviceForm">
+            <input type="hidden" id="deviceId"> <!-- Hidden field for device ID -->
+            <div class="form-group">
+                <label for="ID">Device ID:</label>
+                <input type="text" id="ID" required>
+                
+                <label for="deviceName">Name:</label>
+                <input type="text" id="deviceName" required>
+                
+                <label for="DP">Date of Purchase:</label>
+                <input type="date" id="DP" required>
+                
+                <label for="PP">Purchase Price:</label>
+                <input type="number" id="PP" required>
+                
+                <label for="PF">Purchased From:</label>
+                <input type="text" id="PF" required>
+            </div>               
                 <button type="submit">Save Device</button>
-            </div>
+<br>)
         </form>
 
         <table id="devicesTable">
@@ -127,7 +146,6 @@
             </thead>
             <tbody id="devicesList"></tbody>
         </table>
-
     </div>
 
     <script type="module">
@@ -281,3 +299,5 @@
 </body>
 
 </html>
+
+

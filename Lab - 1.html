@@ -13,17 +13,40 @@
             margin: 0;
             padding: 0;
         }
-
+.header{
         h1 {
-            color: #f9f9f9;
-            margin-left: 120px;
+            color: white;
+            text-align: center;
+            font-size: 25pt;
+            padding: 0;
+        }
+        h2 {
+            color: white;
+            text-align: center;
+            font-size: 12pt;
+            padding: 0;
+        }
+    }
+        
+    button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: maroon;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px; /* Space between button and inputs */
         }
 
-        .container {
-            width: calc(100% - 20px);
-            max-width: 800px;
-            margin: 20px 10px;
-            padding: 20px;
+        button:hover {
+            background-color: darkred; /* Darker shade on hover */
+        }
+    .container {
+            width: calc(100% - 10px);
+            max-width: 400px;
+            margin: 5px 5px;
+            padding: 0px;
             border: 1px solid #800000;
             border-radius: 8px;
             background-color: #f9f9f9;
@@ -36,7 +59,7 @@
         }
 
         td {
-            padding: 8px;
+            padding: 6px;
             border: 1px solid #ccc;
         }
 
@@ -61,18 +84,27 @@
     </nav>
 
     <div class="header">
-        <h1>Lab Appointment</h1>
+        <table>
+            <tr>
+            <img src="\Photos\01_Photos_Index\A Square.jpg" width="240" height="240" alt="A Square">   
+            </tr>
+            <tr>
+            <td><h1>A Square Imaging And Pathology Lab - Lab Appointment</h1>
+            <h2>Location-1: Shop No DSS-3&4, Basement Of Indian Bank, Huda Market, Sector 29, Faridabad-121008; Mobile:93194 44415</h2>
+            <h2>Location-2: Shop No. 95-96, Plot No. 66B, Hardware Chowk, New Industrial Township, Faridabad-121001; Mobile: 99718 83444</h2>
+            </td>
+            </tr>
+        </table>
     </div>
 
     <form id="AppointmentForm" onsubmit="return validateForm()">
-        <input type="hidden" id="AppointmentId"> <!-- Hidden field for device ID -->
-        
+        <input type="hidden" id="AppointmentId"> <!-- Hidden field for Appointment ID -->
+
         <table>
             <tr>
                 <td><label for="AppointmentID">Appointment ID:</label></td>
-                <td><input type="text" id="AppointmentID" required></td>
+                <td><input type="text" id="AppointmentID" readonly></td>
             </tr>
-
             <tr>
                 <td><label for="Patient_Name">Name:</label></td>
                 <td><input type="text" id="Patient_Name" required></td>
@@ -81,12 +113,10 @@
                 <td><label for="Patient_Mobile">Mobile:</label></td>
                 <td><input type="tel" id="Patient_Mobile" required placeholder="e.g. 1234567890"></td>
             </tr>
-
             <tr>
                 <td><label for="Patient_Email">Email:</label></td>
-                <td><input type="email" id="Patient_Email" name="Patient_Email" placeholder="e.g. example@mail.com"></td>
+                <td><input type="email" id="Patient_Email" placeholder="e.g. example@mail.com"></td>
             </tr>
-
             <tr>
                 <td><label for="Patient_Age">Age:</label></td>
                 <td><input type="number" id="Patient_Age" required></td>
@@ -94,14 +124,13 @@
             <tr>
                 <td><label for="Patient_Gender">Gender:</label></td>
                 <td>
-                <select id="Patient_Gender" required>
-                    <option value="" disabled selected>Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </td>
+                    <select id="Patient_Gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </td>
             </tr>
-            
             <tr>
                 <td><label for="Patient_Test">Test:</label></td>
                 <td>
@@ -118,8 +147,8 @@
                 <td>
                     <select id="Lab_Location" required>
                         <option value="" disabled selected>Select Lab Location</option>
-                        <option value="Location-1">Location-1</option>
-                        <option value="Location-2">Location-2</option>
+                        <option value="Location-1">Location-1: Shop No DSS-3&4, Basement Of Indian Bank, Huda Market, Sector 29, Faridabad-121008; Mobile:93194 44415</option>
+                        <option value="Location-2">Location-2:Shop No. 95-96, Plot No. 66B, Hardware Chowk, New Industrial Township, Faridabad-121001; Mobile: 99718 83444</div></option>
                         <option value="Location-3">Location-3</option>
                     </select>
                 </td>
@@ -147,6 +176,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Get the last appointment ID from localStorage or start from 0
+            let lastId = localStorage.getItem('lastAppointmentId') || 0;
+            const appointmentId = parseInt(lastId) + 1; // Increment the ID
+            localStorage.setItem('lastAppointmentId', appointmentId); // Save the new ID
+
+            document.getElementById('AppointmentID').value = appointmentId; // Set the Appointment ID
+
             // Set minimum date to tomorrow
             const today = new Date();
             const tomorrow = new Date(today);
@@ -166,17 +202,13 @@
                 return false; // Prevent form submission
             }
 
-// Include email only if it's not empty
-    if (PatientEmail !== "") {
-        patientData.Email = PatientEmail;
-    }
-    // Validate email address
+            // Validate email address
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                            if (!emailPattern.test(email)) {
-                    alert('Please enter a valid email address.');
-                    return false; // Prevent form submission
-                    }
-                
+            if (email && !emailPattern.test(email)) {
+                alert('Please enter a valid email address.');
+                return false; // Prevent form submission
+            }
+
             // Validate test date
             const selectedDate = new Date(testDate);
             const today = new Date();
@@ -190,115 +222,53 @@
             return true; // Allow form submission
         }
     </script>
-<script type="module">
-    // Import necessary Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // Your Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
-        authDomain: "jwdatabase-f0e20.firebaseapp.com",
-        databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
-        projectId: "jwdatabase-f0e20",
-        storageBucket: "jwdatabase-f0e20.appspot.com",
-        messagingSenderId: "1335908909",
-        appId: "1:1335908909:web:0c132d7c79008c490c36a4",
-        measurementId: "G-BQG1N754TN"
-    };
+    <script type="module">
+        // Import necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
 
-    // Get Devices function
-    async function getDevices() {
-        const devicesList = document.getElementById("devicesList");
-        devicesList.innerHTML = ""; // Clear previous list
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        const devicesCollection = collection(db, "Devices");
-        try {
-            const snapshot = await getDocs(devicesCollection);
-            if (snapshot.empty) {
-                devicesList.innerHTML = "<li>No devices found.</li>";
-            } else {
-                snapshot.forEach(doc => {
-                    const deviceData = doc.data();
-                    const deviceID = doc.id; // Access the Document ID
-                    const listItem = document.createElement("li");
-                    listItem.textContent = `ID: ${deviceData.DeviceID}, Name: ${deviceData.Name}, Stock: ${deviceData.Stock}`;
-                    
-                    
-                    
-                });
-            }
-        } catch (error) {
-            console.error("Error getting devices:", error);
-            devicesList.innerHTML = "<li>Error loading devices.</li>";
-        }
-    }
+        // Get Devices function
+        async function getDevices() {
+            const devicesList = document.getElementById("devicesList");
+            devicesList.innerHTML = ""; // Clear previous list
 
-    // Handle form submission to add or edit a device
-    document.getElementById('deviceForm').addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevent the default form submission
-
-        const deviceID = document.getElementById('deviceId').value;
-        const newDeviceID = document.getElementById('deviceID').value;
-        const deviceName = document.getElementById('deviceName').value;
-        const deviceStock = document.getElementById('deviceStock').value;
-
-        if (deviceID) {
-            // Update existing document
+            const devicesCollection = collection(db, "Devices");
             try {
-                const deviceRef = doc(db, "Devices", deviceID);
-                await updateDoc(deviceRef, {
-                    DeviceID: newDeviceID,
-                    Name: deviceName,
-                    Stock: parseInt(deviceStock) // Ensure stock is stored as a number
-                });
-
-                // Clear the form fields
-                document.getElementById('deviceForm').reset();
-                document.getElementById('deviceId').value = ""; // Clear hidden ID
-
-                // Refresh the device list
-                getDevices();
+                const snapshot = await getDocs(devicesCollection);
+                if (snapshot.empty) {
+                    devicesList.innerHTML = "<li>No devices found.</li>";
+                } else {
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        devicesList.innerHTML += `<li>${data.deviceName}</li>`;
+                    });
+                }
             } catch (error) {
-                console.error("Error updating document: ", error);
-            }
-        } else {
-            // Add a new document
-            try {
-                await addDoc(collection(db, "Devices"), {
-                    DeviceID: newDeviceID,
-                    Name: deviceName,
-                    Stock: parseInt(deviceStock) // Ensure stock is stored as a number
-                });
-
-                // Clear the form fields
-                document.getElementById('deviceForm').reset();
-
-                // Refresh the device list
-                getDevices();
-            } catch (error) {
-                console.error("Error adding document: ", error);
+                console.error("Error fetching devices: ", error);
             }
         }
-    });
 
-    // Function to populate form for editing
-    function editDevice(deviceID, deviceData) {
-        document.getElementById('deviceId').value = deviceID; // Set hidden field to the device ID
-        document.getElementById('deviceID').value = deviceData.DeviceID;
-        document.getElementById('deviceName').value = deviceData.Name;
-        document.getElementById('deviceStock').value = deviceData.Stock;
-    }
-
-    // Function to delete a device
+        // Call function to load data on page load
+        getDevices();
+    </script>
     
-    // Call function to load data on page load
-    getDevices();
-</script>
     <footer>
         &copy; 2024 Jagjit Welfare Trust. All Rights Reserved.
     </footer>

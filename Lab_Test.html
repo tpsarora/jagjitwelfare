@@ -28,7 +28,7 @@
         .header img {
             margin-right: 10px;
             width: 200px;
-            height: auto; /* Responsive */
+            height: auto;
         }
 
         .header h1,
@@ -54,8 +54,8 @@
             cursor: pointer;
             font-weight: bold;
             margin-left: 10px;
-            width: 100%; /* Full width for mobile */
-            font-size: 16px; /* Larger text */
+            width: 100%;
+            font-size: 16px;
         }
 
         button:hover {
@@ -85,7 +85,6 @@
             display: block;
         }
 
-        /* Mobile styles */
         @media (max-width: 600px) {
             .header {
                 flex-direction: column;
@@ -93,7 +92,7 @@
             }
 
             button {
-                margin: 10px 0; /* Space between buttons */
+                margin: 10px 0;
             }
 
             td {
@@ -106,13 +105,13 @@
             }
 
             .nav {
-                display: none; /* Hide navigation by default */
+                display: none;
                 flex-direction: column;
             }
 
             .hamburger {
                 cursor: pointer;
-                display: block; /* Show hamburger */
+                display: block;
                 font-size: 24px;
                 padding: 10px;
             }
@@ -180,9 +179,9 @@
                 <td>
                     <select id="Patient_Test" required>
                         <option value="" disabled selected>Select Test</option>
-                        <option value="Ultrasound">Ultrasound</option>
-                        <option value="CT Scan">CT Scan</option>
-                        <option value="Blood Test">Blood Test</option>
+                        <option value="Ultrasound:500">Ultrasound - ₹500</option>
+                        <option value="CT Scan:1500">CT Scan - ₹1500</option>
+                        <option value="Blood Test:300">Blood Test - ₹300</option>
                     </select>
                 </td>
             </tr>
@@ -218,57 +217,9 @@
         </table>
     </form>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let lastId = localStorage.getItem('lastAppointmentId') || 0;
-            const appointmentId = parseInt(lastId) + 1;
-            localStorage.setItem('lastAppointmentId', appointmentId);
-            document.getElementById('AppointmentID').value = appointmentId;
-
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
-            const minDate = tomorrow.toISOString().split('T')[0];
-            document.getElementById('Test_Date').setAttribute('min', minDate);
-        });
-
-        function validateForm() {
-            const mobile = document.getElementById('Patient_Mobile').value;
-            const email = document.getElementById('Patient_Email').value;
-            const testDate = document.getElementById('Test_Date').value;
-
-            if (!/^\d{10}$/.test(mobile)) {
-                alert('Please enter a valid 10-digit mobile number.');
-                return false;
-            }
-
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (email && !emailPattern.test(email)) {
-                alert('Please enter a valid email address.');
-                return false;
-            }
-
-            const selectedDate = new Date(testDate);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (selectedDate <= today) {
-                alert('Please select a date that is greater than today.');
-                return false;
-            }
-
-            return true;
-        }
-
-        function toggleNav() {
-            const nav = document.querySelector('.nav');
-            nav.style.display = (nav.style.display === 'flex') ? 'none' : 'flex';
-        }
-    </script>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
@@ -284,27 +235,69 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function getDevices() {
-            const devicesList = document.getElementById("devicesList");
-            devicesList.innerHTML = "";
+        document.addEventListener('DOMContentLoaded', function () {
+            let lastId = localStorage.getItem('lastAppointmentId') || 0;
+            const appointmentId = parseInt(lastId) + 1;
+            localStorage.setItem('lastAppointmentId', appointmentId);
+            document.getElementById('AppointmentID').value = appointmentId;
 
-            const devicesCollection = collection(db, "Devices");
-            try {
-                const snapshot = await getDocs(devicesCollection);
-                if (snapshot.empty) {
-                    devicesList.innerHTML = "<li>No devices found.</li>";
-                } else {
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        devicesList.innerHTML += `<li>${data.deviceName}</li>`;
-                    });
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const minDate = tomorrow.toISOString().split('T')[0];
+            document.getElementById('Test_Date').setAttribute('min', minDate);
+        });
+
+        async function isSlotAvailable(testDate, labLocation) {
+            const querySnapshot = await getDocs(collection(db, "Lab_Test"));
+            for (const doc of querySnapshot.docs) {
+                const data = doc.data();
+                if (data.Test_Date === testDate && data.Lab_Location === labLocation) {
+                    return false; // Slot is already booked
                 }
-            } catch (error) {
-                console.error("Error fetching devices: ", error);
             }
+            return true; // Slot is available
         }
 
-        getDevices();
+        document.getElementById("AppointmentForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const selectedTest = document.getElementById('Patient_Test').value;
+            const [testName, testPrice] = selectedTest.split(':');
+            const testDate = document.getElementById('Test_Date').value;
+            const labLocation = document.getElementById('Lab_Location').value;
+
+            // Check if the slot is available
+            const slotAvailable = await isSlotAvailable(testDate, labLocation);
+            if (!slotAvailable) {
+                alert("Slot full for Test_Date and Lab_Location. Please select another date or location.");
+                return; // Stop the form submission
+            }
+
+            const labtestData = {
+                AppointmentID: document.getElementById('AppointmentID').value,
+                Patient_Name: document.getElementById('Patient_Name').value,
+                Patient_Mobile: document.getElementById('Patient_Mobile').value,
+                Patient_Email: document.getElementById('Patient_Email').value,
+                Patient_Age: document.getElementById('Patient_Age').value,
+                Patient_Gender: document.getElementById('Patient_Gender').value,
+                Patient_Test: testName,
+                Test_Price: testPrice,
+                Lab_Location: labLocation,
+                Test_Date: testDate,
+                Test_Slot: document.getElementById('Test_Slot').value,
+            };
+
+            try {
+                await addDoc(collection(db, "Lab_Test"), labtestData);
+                alert("Lab Test added successfully!");
+                document.getElementById("AppointmentForm").reset();
+                document.getElementById('AppointmentID').value = parseInt(localStorage.getItem('lastAppointmentId')) + 1;
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Error saving appointment. Please try again.");
+            }
+        });
     </script>
 
     <footer>

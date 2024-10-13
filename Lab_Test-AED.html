@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../commonstyles.css">
+    <title>Jagjit Welfare Trust</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+    <style>
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        label {
+            margin-right: 10px;
+            width: 150px;
+        }
+
+        input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: maroon;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: darkred;
+        }
+
+        #labtestTable {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: maroon;
+            color: white;
+        }
+
+        #labtestTable th {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid white;
+        }
+
+        #labtestTable td {
+            padding: 10px;
+            text-align: left;
+            background-color: white;
+            border-bottom: 2px solid black;
+            color: black;
+        }
+
+        #labtestTable th.serial,
+        #labtestTable td.serial {
+            text-align: center;
+        }
+
+        #labtestTable td.price {
+            text-align: right;
+        }
+
+        #messageArea {
+            margin: 10px 0;
+            color: green;
+        }
+
+        @media (max-width: 600px) {
+            .form-group {
+                flex-direction: column;
+            }
+
+            label {
+                width: auto;
+            }
+
+            button {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <a href="Patients-AED.html">Patients</a>
+        <a href="Devices-AED.html">Devices</a>
+        <a href="Total Inventory.html">Inventory</a>
+        <a href="Devices Available.html">Dev Available</a>
+        <a href="Issue Register-AED.html">Issue Reg</a>
+        <a href="Register for Issued Devices-AED.html">Dev Issued</a>
+        <a href="Return Register-AED.html">Dev Returned</a>
+    </nav>
+
+    <div class="container-margin">
+        <h1>Jagjit Welfare Trust - Maintain Lab Tests</h1>
+        <div id="messageArea"></div>
+
+        <form id="labtestForm">
+            <input type="hidden" id="labtestId">
+            <div class="form-group">
+                <label for="AppointmentID">Appointment ID:</label>
+                <input type="text" id="AppointmentID" required>
+            </div>
+            <div class="form-group">
+                <label for="Patient_Name">Patient Name:</label>
+                <input type="text" id="Patient_Name" required>
+            </div>
+            <div class="form-group">
+                <label for="Patient_Mobile">Patient Mobile:</label>
+                <input type="tel" id="Patient_Mobile" required>
+            </div>
+            <div class="form-group">
+                <label for="Patient_Email">Patient Email:</label>
+                <input type="email" id="Patient_Email" required>
+            </div>
+            <div class="form-group">
+                <label for="Patient_Age">Patient Age:</label>
+                <input type="number" id="Patient_Age" required>
+            </div>
+            <div class="form-group">
+                <label for="Patient_Gender">Gender:</label>
+                <select id="Patient_Gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Patient_Test">Test:</label>
+                <select id="Patient_Test" required>
+                    <option value="" disabled selected>Select Test</option>
+                    <option value="Ultrasound">Ultrasound</option>
+                    <option value="CT Scan">CT Scan</option>
+                    <option value="Blood Test">Blood Test</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Test_Price">Test Price:</label>
+                <input type="number" id="Test_Price" required>
+            </div>
+            <div class="form-group">
+                <label for="Lab_Location">Lab Location:</label>
+                <select id="Lab_Location" required>
+                    <option value="" disabled selected>Select Lab Location</option>
+                    <option value="Location-1">Location-1: Shop No DSS-3&4, Basement Of Indian Bank, Huda Market, Sector 29, Faridabad-121008; Mobile: 93194 44415</option>
+                    <option value="Location-2">Location-2: Shop No. 95-96, Plot No. 66B, Hardware Chowk, New Industrial Township, Faridabad-121001; Mobile: 99718 83444</option>
+                    <option value="Location-3">Location-3: To be defined</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Test_Date">Test Date:</label>
+                <input type="date" id="Test_Date" required>
+            </div>
+            <div class="form-group">
+                <label for="Test_Slot">Test Time Slot:</label>
+                <select id="Test_Slot" required>
+                    <option value="" disabled selected>Select a time slot</option>
+                    <option value="02:00 to 03:00 PM">02:00 to 03:00 PM</option>
+                    <option value="03:00 to 04:00 PM">03:00 to 04:00 PM</option>
+                    <option value="04:00 to 05:00 PM">04:00 to 05:00 PM</option>
+                </select>
+            </div>
+            <button type="submit">Save Lab Test Data</button>
+        </form>
+
+        <br>
+        <table id="labtestTable">
+            <thead>
+                <tr>
+                    <th class="serial">Serial No.</th>
+                    <th>Appointment ID</th>
+                    <th>Patient Name</th>
+                    <th>Patient Mobile</th>
+                    <th>Patient Email</th>
+                    <th>Patient Age</th>
+                    <th>Patient Gender</th>
+                    <th>Patient Test</th>
+                    <th>Test Price</th>
+                    <th>Lab Location</th>
+                    <th>Test Date</th>
+                    <th>Time Slot</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="labtestList"></tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function getlabtest() {
+            const labtestList = document.getElementById("labtestList");
+            labtestList.innerHTML = "";
+
+            const labtestCollection = collection(db, "Lab_Test");
+            try {
+                const snapshot = await getDocs(query(labtestCollection, orderBy("AppointmentID")));
+                if (snapshot.empty) {
+                    labtestList.innerHTML = "<tr><td colspan='13'>No Lab Test Data found.</td></tr>";
+                } else {
+                    snapshot.docs.forEach(doc => {
+                        const labtestData = { id: doc.id, ...doc.data() };
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td class="serial">${labtestList.childElementCount + 1}</td>
+                            <td>${labtestData.AppointmentID}</td>
+                            <td>${labtestData.Patient_Name}</td>
+                            <td>${labtestData.Patient_Mobile}</td>
+                            <td>${labtestData.Patient_Email}</td>
+                            <td>${labtestData.Patient_Age}</td>
+                            <td>${labtestData.Patient_Gender}</td>
+                            <td>${labtestData.Patient_Test}</td>
+                            <td class="price">${labtestData.Test_Price}</td>
+                            <td>${labtestData.Lab_Location}</td>
+                            <td>${labtestData.Test_Date}</td>
+                            <td>${labtestData.Test_Slot}</td>
+                            <td>
+                                <button onclick="editlabtest('${labtestData.id}')">Edit</button>
+                                <button onclick="deletelabtest('${labtestData.id}')">Delete</button>
+                            </td>
+                        `;
+                        labtestList.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error("Error getting lab tests:", error);
+            }
+        }
+
+        window.editlabtest = function (labtestId) {
+            const docRef = doc(db, "Lab_Test", labtestId);
+            getDoc(docRef).then((doc) => {
+                if (doc.exists()) {
+                    const labtestData = doc.data();
+                    document.getElementById('AppointmentID').value = labtestData.AppointmentID;
+                    document.getElementById('Patient_Name').value = labtestData.Patient_Name;
+                    document.getElementById('Patient_Mobile').value = labtestData.Patient_Mobile;
+                    document.getElementById('Patient_Email').value = labtestData.Patient_Email;
+                    document.getElementById('Patient_Age').value = labtestData.Patient_Age;
+                    document.getElementById('Patient_Gender').value = labtestData.Patient_Gender;
+                    document.getElementById('Patient_Test').value = labtestData.Patient_Test;
+                    document.getElementById('Test_Price').value = labtestData.Test_Price;
+                    document.getElementById('Lab_Location').value = labtestData.Lab_Location;
+                    document.getElementById('Test_Date').value = labtestData.Test_Date;
+                    document.getElementById('Test_Slot').value = labtestData.Test_Slot;
+
+                    document.getElementById('labtestId').value = labtestId;
+                } else {
+                    console.error("No such document!");
+                }
+            }).catch((error) => {
+                console.error("Error getting document:", error);
+            });
+        };
+
+        window.deletelabtest = async function (labtestId) {
+            const docRef = doc(db, "Lab_Test", labtestId);
+            await deleteDoc(docRef);
+            getlabtest(); // Refresh the table
+        };
+
+        document.getElementById("labtestForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const labtestId = document.getElementById('labtestId').value;
+            const labtestData = {
+                AppointmentID: document.getElementById('AppointmentID').value,
+                Patient_Name: document.getElementById('Patient_Name').value,
+                Patient_Mobile: document.getElementById('Patient_Mobile').value,
+                Patient_Email: document.getElementById('Patient_Email').value,
+                Patient_Age: document.getElementById('Patient_Age').value,
+                Patient_Gender: document.getElementById('Patient_Gender').value,
+                Patient_Test: document.getElementById('Patient_Test').value,
+                Test_Price: document.getElementById('Test_Price').value,
+                Lab_Location: document.getElementById('Lab_Location').value,
+                Test_Date: document.getElementById('Test_Date').value,
+                Test_Slot: document.getElementById('Test_Slot').value,
+            };
+
+            if (labtestId) {
+                // Update existing lab test
+                const docRef = doc(db, "Lab_Test", labtestId);
+                await updateDoc(docRef, labtestData);
+                document.getElementById("messageArea").innerText = "Lab Test updated successfully!";
+            } else {
+                // Add new lab test
+                await addDoc(collection(db, "Lab_Test"), labtestData);
+                document.getElementById("messageArea").innerText = "Lab Test added successfully!";
+            }
+
+            document.getElementById("labtestForm").reset();
+            getlabtest(); // Refresh the table
+        });
+
+        // Initial call to load lab tests
+        getlabtest();
+    </script>
+</body>
+
+</html>

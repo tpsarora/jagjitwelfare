@@ -2,7 +2,11 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Appointment</title>
     <link rel="stylesheet" href="commonstyles.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
     <style>
@@ -16,39 +20,46 @@
 
         .header {
             display: flex;
-            align-items: center; /* Vertically center the items */
-            padding: 5px; /* Adjust padding as needed */
+            align-items: center;
+            padding: 5px;
+            flex-wrap: wrap;
         }
 
         .header img {
-            margin-right: 10px; /* Space between image and text */
+            margin-right: 10px;
+            width: 200px;
+            height: auto; /* Responsive */
+        }
+
+        .header h1,
+        .header h2 {
+            color: white;
+            margin: 0;
         }
 
         .header h1 {
-            color: white;
             font-size: 25pt;
-            margin: 0; /* Remove default margin */
         }
 
         .header h2 {
-            color: white;
             font-size: 10pt;
-            margin: 0; /* Remove default margin */
         }
 
         button {
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 5px;
             background-color: maroon;
             color: white;
             cursor: pointer;
             font-weight: bold;
-            margin-left: 10px; /* Space between button and inputs */
+            margin-left: 10px;
+            width: 100%; /* Full width for mobile */
+            font-size: 16px; /* Larger text */
         }
 
         button:hover {
-            background-color: darkred; /* Darker shade on hover */
+            background-color: darkred;
         }
 
         .container {
@@ -73,14 +84,44 @@
         label {
             display: block;
         }
+
+        /* Mobile styles */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            button {
+                margin: 10px 0; /* Space between buttons */
+            }
+
+            td {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            label {
+                margin-bottom: 5px;
+            }
+
+            .nav {
+                display: none; /* Hide navigation by default */
+                flex-direction: column;
+            }
+
+            .hamburger {
+                cursor: pointer;
+                display: block; /* Show hamburger */
+                font-size: 24px;
+                padding: 10px;
+            }
+        }
     </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Appointment</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <div class="hamburger" onclick="toggleNav()">☰</div>
     <nav class="nav">
         <a href="index.html">Home</a>
         <a href="Aboutus.html">About Us</a>
@@ -91,7 +132,7 @@
     </nav>
 
     <div class="header">
-        <img src="\Photos\A_Square1.jpg" width="200" height="100" alt="A Square">
+        <img src="\Photos\A_Square1.jpg" alt="A Square">
         <div>
             <h1>A Square Imaging and Pathology Lab - Appointment</h1>
             <h2>Location 1: Shop No DSS-3&4, Basement of Indian Bank, Huda Market, Sector 29, Faridabad-121008 Mobile: 93194 44415</h2>
@@ -101,7 +142,7 @@
     </div>
 
     <form id="AppointmentForm" onsubmit="return validateForm()">
-        <input type="hidden" id="AppointmentId"> <!-- Hidden field for Appointment ID -->
+        <input type="hidden" id="AppointmentId">
 
         <table>
             <tr>
@@ -179,18 +220,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Get the last appointment ID from localStorage or start from 0
             let lastId = localStorage.getItem('lastAppointmentId') || 0;
-            const appointmentId = parseInt(lastId) + 1; // Increment the ID
-            localStorage.setItem('lastAppointmentId', appointmentId); // Save the new ID
+            const appointmentId = parseInt(lastId) + 1;
+            localStorage.setItem('lastAppointmentId', appointmentId);
+            document.getElementById('AppointmentID').value = appointmentId;
 
-            document.getElementById('AppointmentID').value = appointmentId; // Set the Appointment ID
-
-            // Set minimum date to tomorrow
             const today = new Date();
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
-            const minDate = tomorrow.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+            const minDate = tomorrow.toISOString().split('T')[0];
             document.getElementById('Test_Date').setAttribute('min', minDate);
         });
 
@@ -199,39 +237,39 @@
             const email = document.getElementById('Patient_Email').value;
             const testDate = document.getElementById('Test_Date').value;
 
-            // Validate mobile number
             if (!/^\d{10}$/.test(mobile)) {
                 alert('Please enter a valid 10-digit mobile number.');
-                return false; // Prevent form submission
+                return false;
             }
 
-            // Validate email address
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (email && !emailPattern.test(email)) {
                 alert('Please enter a valid email address.');
-                return false; // Prevent form submission
+                return false;
             }
 
-            // Validate test date
             const selectedDate = new Date(testDate);
             const today = new Date();
-            today.setHours(0, 0, 0, 0); // Set today's time to midnight for accurate comparison
+            today.setHours(0, 0, 0, 0);
 
             if (selectedDate <= today) {
                 alert('Please select a date that is greater than today.');
-                return false; // Prevent form submission
+                return false;
             }
 
-            return true; // Allow form submission
+            return true;
+        }
+
+        function toggleNav() {
+            const nav = document.querySelector('.nav');
+            nav.style.display = (nav.style.display === 'flex') ? 'none' : 'flex';
         }
     </script>
 
     <script type="module">
-        // Import necessary Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-        // Your Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
             authDomain: "jwdatabase-f0e20.firebaseapp.com",
@@ -243,14 +281,12 @@
             measurementId: "G-BQG1N754TN"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Get Devices function
         async function getDevices() {
             const devicesList = document.getElementById("devicesList");
-            devicesList.innerHTML = ""; // Clear previous list
+            devicesList.innerHTML = "";
 
             const devicesCollection = collection(db, "Devices");
             try {
@@ -268,7 +304,6 @@
             }
         }
 
-        // Call function to load data on page load
         getDevices();
     </script>
 

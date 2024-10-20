@@ -32,6 +32,7 @@
             cursor: pointer;
             font-weight: bold;
         }
+
         button:hover {
             background-color: #0056b3;
         }
@@ -268,18 +269,25 @@
 
             if (deviceID) {
                 try {
-                    const deviceRef = doc(db, "Issue", deviceID);
-                    await updateDoc(deviceRef, {
-                        ID: newDeviceID,
-                        PatientID: devicePatientID,
-                        Date_Issued: deviceDateIssued,
-                        Date_Returned: deviceDateReturned,
-                    });
+                    const querySnapshot = await getDocs(query(collection(db, "Issue"), where("ID", "==", deviceID)));
 
-                    document.getElementById('IssueForm').reset();
-                    document.getElementById('deviceId').value = "";
-                    showMessage("Issue updated successfully!");
-                    getDevices();
+                    if (!querySnapshot.empty) {
+                        const deviceRef = querySnapshot.docs[0].ref; // Get the reference of the first document
+                        await updateDoc(deviceRef, {
+                            ID: newDeviceID,
+                            PatientID: devicePatientID,
+                            Date_Issued: deviceDateIssued,
+                            Date_Returned: deviceDateReturned,
+                        });
+
+                        document.getElementById('IssueForm').reset();
+                        document.getElementById('deviceId').value = "";
+                        showMessage("Issue updated successfully!");
+                        getDevices();
+                    } else {
+                        console.log("No matching documents found.");
+                        throw
+                    }
                 } catch (error) {
                     console.error("Error updating document: ", error);
                     showMessage("Error updating device.", 'red');

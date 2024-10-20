@@ -261,8 +261,12 @@
             });
 
             try {
-                if (deviceID) {
-                    const deviceRef = doc(db, "Issue", deviceID);
+                // Query for the document with the matching ID
+                const querySnapshot = await getDocs(query(collection(db, "Issue"), where("ID", "==", deviceID)));
+
+                if (!querySnapshot.empty) {
+                    // Document exists, update it
+                    const deviceRef = querySnapshot.docs[0].ref; // Get the reference of the first matching document
                     await updateDoc(deviceRef, {
                         ID: newDeviceID,
                         PatientID: devicePatientID,
@@ -270,6 +274,7 @@
                         Date_Returned: deviceDateReturned
                     });
                 } else {
+                    // Document does not exist, add new document
                     await addDoc(collection(db, "Issue"), {
                         ID: newDeviceID,
                         PatientID: devicePatientID,
@@ -285,6 +290,7 @@
                 console.error("Error saving device:", error);
                 document.getElementById('messageArea').textContent = "Error saving device. Please try again.";
             }
+
         });
 
         async function deleteDevice(deviceID) {
@@ -317,4 +323,3 @@
 </body>
 
 </html>
-

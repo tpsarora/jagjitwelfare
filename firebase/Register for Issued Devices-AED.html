@@ -32,6 +32,7 @@
             cursor: pointer;
             font-weight: bold;
         }
+
         button:hover {
             background-color: #0056b3;
         }
@@ -275,32 +276,33 @@
         document.getElementById('IssueForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const deviceID = document.getElementById('deviceId').value;
+            const deviceID = document.getElementById('deviceId').value; // This is the ID in the database
             const newDeviceID = document.getElementById('ID').value; // Use the dropdown value
             const devicePatientID = document.getElementById('PatientID').value; // Use the patient dropdown value
             const deviceDateIssued = document.getElementById('Date_Issued').value;
             const deviceDateReturned = document.getElementById('Date_Returned').value || null; // Optional field
 
-            if (deviceID) {
-                try {
-                    const deviceRef = doc(db, "Issue", deviceID);
-                    await updateDoc(deviceRef, {
-                        ID: newDeviceID,
-                        PatientID: devicePatientID,
-                        Date_Issued: deviceDateIssued,
-                        Date_Returned: deviceDateReturned,
-                    });
+            try {
+                if (deviceID) {
+                    // Query to find the document with the matching ID
+                    const querySnapshot = await getDocs(query(collection(db, "Issue"), where("ID", "==", deviceID)));
 
-                    document.getElementById('IssueForm').reset();
-                    document.getElementById('deviceId').value = "";
-                    showMessage("Issue updated successfully!");
-                    getDevices();
-                } catch (error) {
-                    console.error("Error updating document: ", error);
-                    showMessage("Error updating device.", 'red');
-                }
-            } else {
-                try {
+                    if (!querySnapshot.empty) {
+                        // Document exists, update it
+                        const deviceRef = querySnapshot.docs[0].ref; // Get the reference of the first matching document
+                        await updateDoc(deviceRef, {
+                            ID: newDeviceID,
+                            PatientID: devicePatientID,
+                            Date_Issued: deviceDateIssued,
+                            Date_Returned: deviceDateReturned,
+                        });
+
+                        showMessage("Issue updated successfully!");
+                    } else {
+                        showMessage("Device not found for update.", 'red');
+                    }
+                } else {
+                    // No device ID provided, add a new document
                     await addDoc(collection(db, "Issue"), {
                         ID: newDeviceID,
                         PatientID: devicePatientID,
@@ -308,13 +310,15 @@
                         Date_Returned: deviceDateReturned,
                     });
 
-                    document.getElementById('IssueForm').reset();
                     showMessage("Issued successfully!");
-                    getDevices();
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    showMessage("Error adding device.", 'red');
                 }
+
+                document.getElementById('IssueForm').reset();
+                document.getElementById('deviceId').value = "";
+                getDevices();
+            } catch (error) {
+                console.error("Error saving device:", error);
+                showMessage("Error saving device.", 'red');
             }
         });
 

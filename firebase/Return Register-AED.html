@@ -32,6 +32,7 @@
             cursor: pointer;
             font-weight: bold;
         }
+
         button:hover {
             background-color: #0056b3;
         }
@@ -49,9 +50,7 @@
             width: 100%;
             border-collapse: collapse;
             background-color: maroon;
-            /* Maroon background */
             color: white;
-            /* White text color */
         }
 
         th,
@@ -59,22 +58,18 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
-            /* Center align text */
         }
 
         th {
             padding: 10px;
             border-top: 2px solid white;
-            /* Border for headers */
             border-bottom: 2px solid white;
-            /* Border for headers */
         }
 
         td {
             padding: 10px;
             background-color: white;
             border-bottom: 2px solid black;
-            /* Border for cells */
             color: black;
         }
     </style>
@@ -92,7 +87,6 @@
     </nav>
 
     <div class="container-margin">
-
         <h1>Patient Details - Register for Devices already Returned</h1>
 
         <div id="messageArea"></div>
@@ -134,12 +128,11 @@
             </thead>
             <tbody></tbody>
         </table>
-
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getFirestore, query, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",

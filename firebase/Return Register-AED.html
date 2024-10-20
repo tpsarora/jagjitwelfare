@@ -285,8 +285,7 @@
                         showMessage("Issue updated successfully!");
                         getDevices();
                     } else {
-                        console.log("No matching documents found.");
-                        throw
+                        showMessage("No matching documents found.", 'red');
                     }
                 } catch (error) {
                     console.error("Error updating document: ", error);

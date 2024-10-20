@@ -199,6 +199,7 @@
             } catch (error) {
                 console.error("Error getting devices:", error);
                 devicesIssued.innerHTML = "<tr><td colspan='8'>Error loading devices.</td></tr>";
+                document.getElementById('messageArea').textContent = "Error loading devices. Please try again.";
             }
         }
 
@@ -218,6 +219,7 @@
                 });
             } catch (error) {
                 console.error("Error loading devices from Devices1:", error);
+                document.getElementById('messageArea').textContent = "Error loading devices. Please try again.";
             }
         }
 
@@ -237,6 +239,7 @@
                 });
             } catch (error) {
                 console.error("Error loading patients from Patients:", error);
+                document.getElementById('messageArea').textContent = "Error loading patients. Please try again.";
             }
         }
 
@@ -248,6 +251,14 @@
             const devicePatientID = document.getElementById('PatientID').value;
             const deviceDateIssued = document.getElementById('Date_Issued').value;
             const deviceDateReturned = document.getElementById('Date_Returned').value || null;
+
+            console.log('Submitting device:', {
+                deviceID,
+                newDeviceID,
+                devicePatientID,
+                deviceDateIssued,
+                deviceDateReturned
+            });
 
             try {
                 if (deviceID) {
@@ -272,6 +283,7 @@
                 getDevices();
             } catch (error) {
                 console.error("Error saving device:", error);
+                document.getElementById('messageArea').textContent = "Error saving device. Please try again.";
             }
         });
 
@@ -282,6 +294,7 @@
                     getDevices();
                 } catch (error) {
                     console.error("Error deleting device:", error);
+                    document.getElementById('messageArea').textContent = "Error deleting device. Please try again.";
                 }
             }
         }
@@ -304,3 +317,4 @@
 </body>
 
 </html>
+

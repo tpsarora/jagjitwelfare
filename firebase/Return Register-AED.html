@@ -318,19 +318,34 @@
             document.getElementById('Date_Returned').value = device.Date_Returned; // Set returned date
         }
 
-        async function deleteDevice(ID) {
+        async function deleteDevice(deviceID) {
             if (confirm("Are you sure you want to delete this device?")) {
+                console.log("Device ID: ", deviceID);
+                const issuesRef = collection(db, "Issue");
+                const q = query(issuesRef, where("ID", "==", deviceID));
+
                 try {
-                    await deleteDoc(doc(db, "Issue", ID));
-                    showMessage("Device deleted successfully!");
-                    getDevices();
+                    const querySnapshot = await getDocs(q);
+                    if (querySnapshot.empty) {
+                        console.log("No matching documents found.");
+                        document.getElementById('messageArea').textContent = "No device found to delete.";
+                        return;
+                    }
+
+                    // Loop through matching documents and delete them
+                    querySnapshot.forEach(async (doc) => {
+                        await deleteDoc(doc.ref);
+                        console.log(`Document with id ${deviceID} deleted successfully.`);
+                    });
+
+                    getDevices(); // Refresh the devices list
                 } catch (error) {
-                    console.error("Error deleting document: ", error);
-                    showMessage("Error deleting device.", 'red');
+                    console.error("Error deleting device:", error);
+                    document.getElementById('messageArea').textContent = "Error deleting device. Please try again.";
                 }
             }
         }
-
+        
         function showMessage(message, color = 'green') {
             const messageArea = document.getElementById("messageArea");
             messageArea.textContent = message;

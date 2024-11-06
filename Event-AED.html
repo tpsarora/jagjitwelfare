@@ -70,10 +70,6 @@
             text-align: center;
         }
 
-        #eventTable td.price {
-            text-align: right;
-        }
-
         #messageArea {
             margin: 10px 0;
             color: green;
@@ -96,7 +92,6 @@
 </head>
 
 <body>
-    
     <div class="container-margin">
         <h1>Maintain Events</h1>
         <div id="messageArea"></div>
@@ -104,41 +99,41 @@
         <form id="eventForm">
             <div class="form-group">
                 <label for="SNo">Serial Number:</label>
-                <input type="number="SNo" required>
-                
+                <input type="number" id="eventSNo" required>
+
                 <label for="Name">Name:</label>
                 <input type="text" id="eventName" required>
-                
+
                 <label for="G_Name">G_Name:</label>
                 <input type="text" id="eventG_Name" required>
-                
+
                 <label for="Event">Event:</label>
                 <input type="text" id="eventEvent" required>
 
                 <label for="Date">Date:</label>
                 <input type="date" id="eventDate" required>
             </div>               
-                <button type="submit">Save Event</button>
-                <br>
+            <button type="submit">Save Event</button>
         </form>
 
         <table id="eventTable">
             <thead>
                 <tr>
-                    <th class="SNo">Serial No.</th>
+                    <th class="serial">Serial No.</th>
                     <th>Name</th>
                     <th>G_Name</th>
                     <th>Event</th>
                     <th>Date</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="Event"></tbody>
+            <tbody id="eventList"></tbody>
         </table>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
@@ -154,6 +149,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Function to get all events
         async function getEvent() {
             const eventList = document.getElementById("eventList");
             eventList.innerHTML = "";
@@ -162,18 +158,12 @@
             try {
                 const snapshot = await getDocs(eventCollection);
                 if (snapshot.empty) {
-                    eventList.innerHTML = "<tr><td colspan='7'>No Events found.</td></tr>";
+                    eventList.innerHTML = "<tr><td colspan='6'>No Events found.</td></tr>";
                 } else {
                     const eventArray = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    eventArray.sort((a, b) => a.ID.localeCompare(b.ID));
+                    eventArray.sort((a, b) => a.SNo - b.SNo);
 
                     eventArray.forEach((eventData, index) => {
-                        const purchaseDate = new Date(eventData.DP).toLocaleDateString('en-GB', {
-                            day: '2-digit', month: 'short', year: 'numeric'
-                        }).replace(/(\d{2})\/(\w{3})\/(\d{4})/, '$1-$2-$3');
-
-
-
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td class="serial">${index + 1}</td>
@@ -181,8 +171,7 @@
                             <td>${eventData.Name}</td>
                             <td>${eventData.G_Name}</td>
                             <td>${eventData.Event}</td>
-                            <td>${Date}</td>
-                            <td>${eventdata.PF}</td>
+                            <td>${eventData.Date}</td>
                             <td>
                                 <button onclick="editEvent('${eventData.SNo}', ${JSON.stringify(eventData).replace(/"/g, '&quot;')})">Edit</button>
                                 <button onclick="deleteEvent('${eventData.SNo}')">Delete</button>
@@ -193,92 +182,64 @@
                 }
             } catch (error) {
                 console.error("Error getting Events:", error);
-                eventList.innerHTML = "<tr><td colspan='7'>Error loading Events.</td></tr>";
+                eventList.innerHTML = "<tr><td colspan='6'>Error loading Events.</td></tr>";
             }
         }
 
         document.getElementById('eventForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const eventSNo = document.getElementById('SNo').value;
+            const eventSNo = parseInt(document.getElementById('eventSNo').value);
             const eventName = document.getElementById('eventName').value;
             const eventG_Name = document.getElementById('eventG_Name').value;
             const eventEvent = document.getElementById('eventEvent').value;
             const eventDate = document.getElementById('eventDate').value;
 
-            if (eventSNo) {
-                try {
-                    const eventRef = doc(db, "Event", eventSNo);
-                    await updateDoc(eventRef, {
-                        SNo: eventSNo,
+            console.log("Form Submission - SNo:", eventSNo);
+            console.log("Event Data:", { eventName, eventG_Name, eventEvent, eventDate });
+
+            if (isNaN(eventSNo)) {
+                showMessage("Please enter a valid Serial Number.", "red");
+                return;
+            }
+
+            try {
+                console.log("Querying Firestore for SNo:", eventSNo);
+                const q = query(collection(db, "Event"), where("SNo", "==", eventSNo));
+                const querySnapshot = await getDocs(q);
+                console.log("Query result size:", querySnapshot.size);
+
+                if (querySnapshot.empty) {
+                    showMessage("Event not found for the given Serial Number.", "red");
+                } else {
+                    const docRef = querySnapshot.docs[0].ref;
+                    await updateDoc(docRef, {
                         Name: eventName,
                         G_Name: eventG_Name,
                         Event: eventEvent,
-                        Date: eventDate,
+                        Date: eventDate
                     });
 
                     document.getElementById('eventForm').reset();
-                    document.getElementById('eventSNo').value = "";
                     showMessage("Event updated successfully!");
                     getEvent();
-                } catch (error) {
-                    console.error("Error updating document: ", error);
-                    showMessage("Error updating Event.", 'red');
                 }
-            } else {
-                try {
-                    await addDoc(collection(db, "Event"), {
-                        SNo: eventSNo,
-                        Name: eventName,
-                        G_Name: eventG_Name,
-                        Event: eventEvent,
-                        Date: eventDate,
-                    });
-
-                    document.getElementById('eventForm').reset();
-                    showMessage("Event added successfully!");
-                    getEvent();
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    showMessage("Error adding Event.", 'red');
-                }
+            } catch (error) {
+                console.error("Error updating event:", error);
+                showMessage("Error updating Event.", "red");
             }
         });
 
-        window.editEvent = function (SNo, eventData) {
-            document.getElementById('eventSNo').value = SNo;
-            document.getElementById('eventName').value = eventData.Name;
-            document.getElementById('eventG_Name').value = eventData.G_Name;
-            document.getElementById('eventEvent').value = eventData.Event;            
-            document.getElementById('eventDate').value = eventData.Date;
-            };
-
-        window.deleteEvent = async function (SNo) {
-            if (confirm("Are you sure you want to delete this event?")) {
-                try {
-                    await deleteDoc(doc(db, "Event", SNo));
-                    showMessage("Event deleted successfully!");
-                    getEvent();
-                } catch (error) {
-                    console.error("Error deleting document: ", error);
-                    showMessage("Error deleting Event.", 'red');
-                }
-            }
-        };
-
-        function showMessage(message, color = 'green') {
-            const messageArea = document.getElementById('messageArea');
+        function showMessage(message, color = "green") {
+            const messageArea = document.getElementById("messageArea");
             messageArea.textContent = message;
             messageArea.style.color = color;
-            setTimeout(() => {
-                messageArea.textContent = '';
-            }, 3000);
         }
 
+        // Load events on page load
         getEvent();
     </script>
 </body>
 
 </html>
-
 

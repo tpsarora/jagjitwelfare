@@ -208,6 +208,8 @@
         async function populateDeviceDropdown() {
             const deviceDropdown = document.getElementById("ID");
             const devicesCollection = collection(db, "Devices1");
+            const deviceNameMap = {}; // Mapping device ID to device name
+
             try {
                 const snapshot = await getDocs(devicesCollection);
                 deviceDropdown.innerHTML = '<option value="">Select Device</option>';

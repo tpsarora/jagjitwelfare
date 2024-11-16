@@ -53,11 +53,10 @@
             padding: 10px;
             text-align: left;
             border: 1px solid white;
-            color: white
         }
 
         table td {
-            color: white
+            color: black;
         }
 
         #messageArea {
@@ -89,7 +88,6 @@
                     <option value="">Select an Occasion</option>
                     <option value="Birthday">Birthday</option>
                     <option value="Anniversary">Anniversary</option>
-                    <option value="Reminder">Reminder</option>
                 </select>
 
                 <label for="Date">Date:</label>
@@ -151,15 +149,9 @@
                 if (snapshot.empty) {
                     eventList.innerHTML = "<tr><td colspan='8'>No Events found.</td></tr>";
                 } else {
-                    const sortedDocs = snapshot.docs.sort((a, b) => {
-                const eventA = a.data();
-                const eventB = b.data();
-                return eventA.SNo - eventB.SNo; // Ascending order of SNo
-            });
-             // Loop through the sorted documents and create table rows
-                sortedDocs.forEach(doc => {
-                const eventData = doc.data();
-                const row = document.createElement("tr");
+                    snapshot.docs.forEach(doc => {
+                        const eventData = doc.data();
+                        const row = document.createElement("tr");
 
                         // Date is already a string, so we can display it directly
                         const eventDate = eventData.Date;

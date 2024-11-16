@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../commonstyles.css">
+    <title>Medical Device Rental</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+    <style>
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input,
+        button,
+        select {
+            margin: 5px 0;
+            padding: 5px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: maroon;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #devicesIssued {
+            margin-top: 20px;
+        }
+
+        #messageArea {
+            margin: 10px 0;
+            color: green;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: maroon;
+            color: white;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            padding: 10px;
+            border-top: 2px solid white;
+            border-bottom: 2px solid white;
+        }
+
+        td {
+            padding: 10px;
+            background-color: white;
+            border-bottom: 2px solid black;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <a href="Patients-AED.html">Patients</a>
+        <a href="Devices-AED.html">Devices</a>
+        <a href="Total Inventory.html">Inventory</a>
+        <a href="Devices Available.html">Dev Available</a>
+        <a href="Issue Register-AED.html">Issue Reg</a>
+        <a href="Register for Issued Devices-AED.html">Dev Issued</a>
+        <a href="Return Register-AED.html">Dev Returned</a>
+    </nav>
+
+    <div class="container-margin">
+        <h1>Patient Details - Issue Register</h1>
+        <div id="messageArea"></div>
+
+        <form id="IssueForm">
+            <input type="hidden" id="deviceId">
+
+            <label for="DeviceID">Device:</label>
+            <select id="ID" required>
+                <option value="">Select Device</option>
+            </select>
+
+            <label for="PatientID">Patient:</label>
+            <select id="PatientID" required>
+                <option value="">Select Patient</option>
+            </select>
+
+            <label for="Date_Issued">Date of Issue:</label>
+            <input type="date" id="Date_Issued" required>
+
+            <label for="Date_Returned">Date of Return:</label>
+            <input type="date" id="Date_Returned"> <!-- Optional field -->
+
+            <button type="submit">Save Device</button>
+        </form>
+
+        <table id="devicesIssued">
+            <thead>
+                <tr>
+                    <th>Serial Number</th>
+                    <th>Device ID</th>
+                    <th>Device Name</th>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Date of Issue</th>
+                    <th>Date of Return</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, where, query, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
+            authDomain: "jwdatabase-f0e20.firebaseapp.com",
+            databaseURL: "https://jwdatabase-f0e20-default-rtdb.firebaseio.com",
+            projectId: "jwdatabase-f0e20",
+            storageBucket: "jwdatabase-f0e20.appspot.com",
+            messagingSenderId: "1335908909",
+            appId: "1:1335908909:web:0c132d7c79008c490c36a4",
+            measurementId: "G-BQG1N754TN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let deviceNameMap = {};
+        let patientNameMap = {};
+
+        function formatDate(dateString) {
+            if (!dateString) return "N/A";
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-GB', options);
+        }
+
+        async function getDevices() {
+            const devicesIssued = document.getElementById("devicesIssued").getElementsByTagName("tbody")[0];
+            devicesIssued.innerHTML = "";
+
+            const devicesCollection = collection(db, "Issue");
+            try {
+                const snapshot = await getDocs(devicesCollection);
+                if (snapshot.empty) {
+                    devicesIssued.innerHTML = "<tr><td colspan='8'>No devices found.</td></tr>";
+                    return;
+                }
+
+                const devices = snapshot.docs.map(doc => ({
+                    ID: doc.id,
+                    ...doc.data()
+                }));
+
+                console.log(devices);
+
+                devices.sort((a, b) => new Date(a.Date_Issued) - new Date(b.Date_Issued));
+
+                devices.forEach((device, index) => {
+                    const row = devicesIssued.insertRow();
+                    row.insertCell(0).textContent = index + 1;
+                    row.insertCell(1).textContent = device.ID || "N/A";
+                    row.insertCell(2).textContent = deviceNameMap[device.ID] || "N/A";
+                    row.insertCell(3).textContent = device.PatientID || "N/A";
+                    row.insertCell(4).textContent = patientNameMap[device.PatientID] || "N/A";
+                    row.insertCell(5).textContent = formatDate(device.Date_Issued);
+                    row.insertCell(6).textContent = formatDate(device.Date_Returned);
+
+                    const actionsCell = row.insertCell(7);
+                    const editButton = document.createElement("button");
+                    editButton.textContent = "Edit";
+                    editButton.onclick = () => editDevice(device);
+                    actionsCell.appendChild(editButton);
+
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete";
+                    deleteButton.onclick = () => deleteDevice(device.ID);
+                    actionsCell.appendChild(deleteButton);
+                });
+            } catch (error) {
+                console.error("Error getting devices:", error);
+                devicesIssued.innerHTML = "<tr><td colspan='8'>Error loading devices.</td></tr>";
+                document.getElementById('messageArea').textContent = "Error loading devices. Please try again.";
+            }
+        }
+
+        async function populateDeviceDropdown() {
+    const deviceDropdown = document.getElementById("ID");
+    const devicesCollection = collection(db, "Devices1");
+    const deviceNameMap = {}; // Mapping device ID to device name
+
+    try {
+        // Fetch all devices
+        const snapshot = await getDocs(devicesCollection);
+        const allDevices = snapshot.docs.map(doc => ({
+            id: doc.data().ID,
+            name: doc.data().Name
+        }));
+
+        // Fetch all issued devices
+        const issuedDevicesSnapshot = await getDocs(collection(db, "Issue"));
+        const issuedDeviceIds = issuedDevicesSnapshot.docs
+            .filter(doc => !doc.data().Date_Returned || doc.data().Date_Returned === 'null') // Check if the device is still issued
+            .map(doc => doc.data().ID);
+
+        // Filter out the issued devices
+        const availableDevices = allDevices.filter(device => !issuedDeviceIds.includes(device.id));
+
+        // Sort available devices alphabetically by device name
+        availableDevices.sort((a, b) => a.name.localeCompare(b.name));
+
+        // Clear existing options and add the default "Select Device"
+        deviceDropdown.innerHTML = '<option value="">Select Device</option>';
+
+        // Loop through the available devices and populate the dropdown
+        availableDevices.forEach(device => {
+            const option = document.createElement("option");
+            option.value = device.id; // Set the device ID as the value of the option
+            option.textContent = `${device.id} - ${device.name}`; // Show ID and Name in the dropdown
+            deviceDropdown.appendChild(option);
+
+            // Add device ID and Name to the deviceNameMap
+            deviceNameMap[device.id] = device.name;
+        });
+
+            } catch (error) {
+                console.error("Error loading devices from Devices1:", error);
+                document.getElementById('messageArea').textContent = "Error loading devices. Please try again.";
+            }
+        }
+
+        async function populatePatientDropdown() {
+            const patientDropdown = document.getElementById("PatientID");
+            const patientsCollection = collection(db, "Patients");
+            try {
+                const snapshot = await getDocs(patientsCollection);
+                patientDropdown.innerHTML = '<option value="">Select Patient</option>';
+                snapshot.forEach(doc => {
+                    const patientData = doc.data();
+                    const option = document.createElement("option");
+                    option.value = patientData.PatientID;
+                    option.textContent = `${patientData.PatientID} - ${patientData.Name}`;
+                    patientDropdown.appendChild(option);
+                    patientNameMap[patientData.PatientID] = patientData.Name;
+                });
+            } catch (error) {
+                console.error("Error loading patients from Patients:", error);
+                document.getElementById('messageArea').textContent = "Error loading patients. Please try again.";
+            }
+        }
+
+        document.getElementById('IssueForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const deviceID = document.getElementById('deviceId').value;
+            const newDeviceID = document.getElementById('ID').value;
+            const devicePatientID = document.getElementById('PatientID').value;
+            const deviceDateIssued = document.getElementById('Date_Issued').value;
+            const deviceDateReturned = document.getElementById('Date_Returned').value;
+
+            console.log('Submitting device:', {
+                deviceID,
+                newDeviceID,
+                devicePatientID,
+                deviceDateIssued,
+                deviceDateReturned
+            });
+
+            try {
+                // Query for the document with the matching ID
+                const querySnapshot = await getDocs(query(collection(db, "Issue"), where("ID", "==", deviceID)));
+
+                if (!querySnapshot.empty) {
+                    // Document exists, update it
+                    const deviceRef = querySnapshot.docs[0].ref; // Get the reference of the first matching document
+                    await updateDoc(deviceRef, {
+                        ID: newDeviceID,
+                        PatientID: devicePatientID,
+                        Date_Issued: deviceDateIssued,
+                        Date_Returned: deviceDateReturned
+                    });
+                } else {
+                    // Document does not exist, add new document
+                    await addDoc(collection(db, "Issue"), {
+                        ID: newDeviceID,
+                        PatientID: devicePatientID,
+                        Date_Issued: deviceDateIssued,
+                        Date_Returned: deviceDateReturned
+                    });
+                }
+
+                document.getElementById('IssueForm').reset();
+                document.getElementById('deviceId').value = "";
+                getDevices();
+            } catch (error) {
+                console.error("Error saving device:", error);
+                document.getElementById('messageArea').textContent = "Error saving device. Please try again.";
+            }
+
+        });
+
+        async function deleteDevice(deviceID) {
+            if (confirm("Are you sure you want to delete this device?")) {
+                console.log("Device ID: ", deviceID);
+                const issuesRef = collection(db, "Issue");
+                const q = query(issuesRef, where("ID", "==", deviceID));
+
+                try {
+                    const querySnapshot = await getDocs(q);
+                    if (querySnapshot.empty) {
+                        console.log("No matching documents found.");
+                        document.getElementById('messageArea').textContent = "No device found to delete.";
+                        return;
+                    }
+
+                    // Loop through matching documents and delete them
+                    querySnapshot.forEach(async (doc) => {
+                        await deleteDoc(doc.ref);
+                        console.log(`Document with id ${deviceID} deleted successfully.`);
+                    });
+
+                    getDevices(); // Refresh the devices list
+                } catch (error) {
+                    console.error("Error deleting device:", error);
+                    document.getElementById('messageArea').textContent = "Error deleting device. Please try again.";
+                }
+            }
+        }
+
+        async function editDevice(device) {
+            console.log("Editing device:", device);
+            document.getElementById('deviceId').value = device.ID;
+            document.getElementById('ID').value = device.ID;
+            document.getElementById('PatientID').value = device.PatientID;
+            document.getElementById('Date_Issued').value = device.Date_Issued;
+            document.getElementById('Date_Returned').value = device.Date_Returned;
+        }
+
+        window.onload = async () => {
+            await populateDeviceDropdown();
+            await populatePatientDropdown();
+            getDevices();
+        };
+    </script>
+</body>
+
+</html>

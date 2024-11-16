@@ -205,7 +205,7 @@
             }
         }
 
-        async function populateDeviceDropdown() {
+    async function populateDeviceDropdown() {
     const deviceDropdown = document.getElementById("ID");
     const devicesCollection = collection(db, "Devices1");
     const deviceNameMap = {}; // Mapping device ID to device name
@@ -227,9 +227,14 @@
         // Filter out the issued devices
         const availableDevices = allDevices.filter(device => !issuedDeviceIds.includes(device.id));
 
-        // Sort available devices alphabetically by device name
-        availableDevices.sort((a, b) => a.name.localeCompare(b.name));
+                // Log the available devices before sorting
+                console.log("Available devices before sorting:", availableDevices);
 
+                // Sort available devices alphabetically by device name
+                    availableDevices.sort((a, b) => {
+                // Ensure both names are strings and compare them correctly
+                      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+                });
         // Clear existing options and add the default "Select Device"
         deviceDropdown.innerHTML = '<option value="">Select Device</option>';
 

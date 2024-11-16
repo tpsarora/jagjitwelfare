@@ -206,41 +206,21 @@
         }
 
         async function populateDeviceDropdown() {
-    const deviceDropdown = document.getElementById("ID");
-    const devicesCollection = collection(db, "Devices1");
-    const deviceNameMap = {}; // Mapping device ID to device name
+            const deviceDropdown = document.getElementById("ID");
+            const devicesCollection = collection(db, "Devices1");
+            const deviceNameMap = {}; // Mapping device ID to device name
 
-    try {
-        // Fetch all devices
-        const snapshot = await getDocs(devicesCollection);
-        const allDevices = snapshot.docs.map(doc => ({
-            id: doc.data().ID,
-            name: doc.data().Name
-        }));
-
-        // Fetch all issued devices
-        const issuedDevicesSnapshot = await getDocs(collection(db, "Issue"));
-        const issuedDeviceIds = issuedDevicesSnapshot.docs
-            .filter(doc => !doc.data().Date_Returned || doc.data().Date_Returned === 'null') // Check if the device is still issued
-            .map(doc => doc.data().ID);
-
-        // Filter out the issued devices
-        const availableDevices = allDevices.filter(device => !issuedDeviceIds.includes(device.id));
-
-        // Clear existing options and add the default "Select Device"
-        deviceDropdown.innerHTML = '<option value="">Select Device</option>';
-
-        // Loop through the available devices and populate the dropdown
-        availableDevices.forEach(device => {
-            const option = document.createElement("option");
-            option.value = device.id; // Set the device ID as the value of the option
-            option.textContent = `${device.id} - ${device.name}`; // Show ID and Name in the dropdown
-            deviceDropdown.appendChild(option);
-
-            // Add device ID and Name to the deviceNameMap
-            deviceNameMap[device.id] = device.name;
-        });
-        
+            try {
+                const snapshot = await getDocs(devicesCollection);
+                deviceDropdown.innerHTML = '<option value="">Select Device</option>';
+                snapshot.forEach(doc => {
+                    const deviceData = doc.data();
+                    const option = document.createElement("option");
+                    option.value = deviceData.ID;
+                    option.textContent = `${deviceData.ID} - ${deviceData.Name}`;
+                    deviceDropdown.appendChild(option);
+                    deviceNameMap[deviceData.ID] = deviceData.Name;
+                });
             } catch (error) {
                 console.error("Error loading devices from Devices1:", error);
                 document.getElementById('messageArea').textContent = "Error loading devices. Please try again.";

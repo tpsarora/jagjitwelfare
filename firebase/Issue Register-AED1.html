@@ -227,17 +227,25 @@
         // Filter out the issued devices
         const availableDevices = allDevices.filter(device => !issuedDeviceIds.includes(device.id));
 
-                // Log the available devices before sorting
-                console.log("Available devices before sorting:", availableDevices);
+                       // Log the available devices before sorting to check their names
+        console.log("Available devices before sorting:", availableDevices);
 
-                // Sort available devices alphabetically by device name
-                    availableDevices.sort((a, b) => {
-                // Ensure both names are strings and compare them correctly
-                      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
-                });
+// Sort available devices alphabetically by device name
+availableDevices.sort((a, b) => {
+    // Clean up the names by trimming extra spaces
+    const nameA = a.name.trim().toLowerCase();
+    const nameB = b.name.trim().toLowerCase();
 
-                // Log the available devices after sorting
-                    console.log("Available devices after sorting:", availableDevices);
+    // Log names before sorting to check how they compare
+    console.log(`Comparing: ${nameA} with ${nameB}`);
+
+    // Sort alphabetically
+    return nameA.localeCompare(nameB);
+});
+
+// Log the available devices after sorting to ensure it's sorted correctly
+console.log("Available devices after sorting:", availableDevices);
+
         // Clear existing options and add the default "Select Device"
         deviceDropdown.innerHTML = '<option value="">Select Device</option>';
 

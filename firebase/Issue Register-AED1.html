@@ -235,6 +235,9 @@
                 // Ensure both names are strings and compare them correctly
                       return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
                 });
+
+                // Log the available devices after sorting
+                    console.log("Available devices after sorting:", availableDevices);
         // Clear existing options and add the default "Select Device"
         deviceDropdown.innerHTML = '<option value="">Select Device</option>';
 

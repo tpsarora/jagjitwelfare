@@ -106,9 +106,9 @@
                 querySnapshot.forEach((docSnapshot) => {
                     const eventData = docSnapshot.data();
                     const occasion = eventData.Occasion;
-                    const eventName = eventData.Name;
-                    const eventGName = eventData.G_Name;
-                    const eventEmail = eventData.Email;
+                    const eventName = eventData.To_Name;
+                    const eventGName = eventData.To_Gname;
+                    const eventEmail = eventData.To_Email;
 
                     const eventDate = eventData.Date;  // Event date stored as string in YYYY-MM-DD format
                     if (eventDate === todayFormatted) {

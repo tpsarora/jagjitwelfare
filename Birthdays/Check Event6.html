@@ -48,6 +48,7 @@
 <body>
     <div class="container">
         <h1>Check Today's Events</h1>
+        <button id="checkEventsButton">Send Emails</button>
         <div id="loadingSpinner">Loading...</div>
         <div class="message" id="messageArea"></div>
     </div>
@@ -150,14 +151,12 @@
             }
         }
 
-          // Function to send an email using EmailJS
-          function sendEmail(recipientEmail, eventsMessage, eventsSubject, eventsGName) {
-            const emailContent = `Today's Event: <br>${eventsMessage}`;
-            const emailSubject = `${eventsSubject}`;
+        // Function to send an email using EmailJS
+        function sendEmail(recipientEmail, eventsMessage, eventsSubject, eventsGName) {
             const emailMessage = `${eventsMessage}`;
-//    const emailMessage = `<html> <img src="cid:1.jpg" alt="Birthday Wishes"> </html>`;
-            const emailName = `${eventsGName}`;           
-            // Send email dynamically to the recipient using EmailJS
+            const emailSubject = `${eventsSubject}`;
+            const emailName = `${eventsGName}`;
+
             emailjs.send("service_jitwsrj", "template_m0u22pm", {
                 from_name: "Tavinder Arora",
                 to_name: emailName,
@@ -165,6 +164,7 @@
                 email: recipientEmail, // Send to the recipient email
                 subject: emailSubject,
                 message: emailMessage, // Correctly pass the email content
+                link: "https://www.jagjitwelfare.com/Birthdays/image.png"
             }).then(function(response) {
                 console.log('Success:', response);
                 document.getElementById('messageArea').textContent = 'Email sent successfully!';
@@ -176,8 +176,8 @@
             });
         }
 
-        // Run the check and email function as soon as the page loads
-        checkAndSendEmails();
+        // Attach click event listener to button
+        document.getElementById('checkEventsButton').addEventListener('click', checkAndSendEmails);
 
         // Initialize EmailJS with your user ID
         emailjs.init("qcbXaXrWGMaIRt6_o");  // Replace with your actual EmailJS user ID
